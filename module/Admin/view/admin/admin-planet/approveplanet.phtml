@@ -1,0 +1,40 @@
+<?php
+$title = 'Approved Planet';
+$this->headTitle($title);
+?>
+<section id="secondary_bar">
+
+    <div class="breadcrumbs_container">
+        <article class="breadcrumbs">
+			<a href="<?php echo $this->url('admin') ?>">Admin Dashboard </a>
+			<div class="breadcrumb_divider"></div>
+			<a  class="current" href="<?php echo $this->url('admin/admin-planet') ?>">Manage Planet</a>
+			<div class="breadcrumb_divider"></div>
+			<a href="<?php echo $this->url('admin/admin-planet', array('action'=>'approvelist')) ?>">Manage Planet Approval</a>
+			<div class="breadcrumb_divider"></div>
+			<a href="javascript:void(0);">Approved Planet</a>
+		</article>
+    </div>
+</section><!-- end of secondary bar -->
+<section id="main" class="column">
+<article class="module width_full">
+			<header><h3><?php echo $this->escapeHtml($title); ?></h3></header>
+				<div class="module_content">
+			
+	<p>Are you sure that you want to approve  '<b><?php echo $this->escapeHtml($approvegroup->group_add_suggestion_name); ?></b>'</p>
+<?php 
+$url = $this->url('admin/admin-planet', array('action' => 'approveplanet', 'id'=>$this->id)); ?>
+<form action="<?php echo $url; ?>" method="post">
+<div>
+  <input type="hidden" name="id" value="<?php echo (int)$approvegroup->group_add_suggestion_id; ?>" />
+  <input type="submit" name="del" value="Approve" />
+  <input type="submit" name="del" value="No" />
+</div>
+</form>
+
+				</div>
+		</article>
+    
+    <div class="clear"></div>
+    <div class="spacer"></div>
+</section>

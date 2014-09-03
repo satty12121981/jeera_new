@@ -1,0 +1,28 @@
+<html>
+	<div id="container">
+		<?php
+			use Zend\Form\Element;
+			if(isset($form)):
+				$form = $this->form;
+				$form->setAttribute('action', $this->url('spam/spam', array('action' => 'add','group_id'=>$GroupId, 'sub_group_id'=>$SubGroupId,'group_refer_id'=>$GroupReferId,'system_type_id'=>$SystemTypeId)));
+				$form->setAttribute('name', $GroupReferId);
+				$form->setAttribute('class', 'problemclass');
+				$form->prepare();
+				echo $this->form()->openTag($form);
+				if(isset($ProblemData) && count($ProblemData)) : 
+					foreach($ProblemData as $Problem):
+						$samplearray[$Problem->problem_id] = $Problem->problem_reason_title;
+						//echo $this->escapeHtmlAttr($Problem->problem_reason_title)."<br>";
+					endforeach;
+				endif;
+				$radio = new Element\Radio('problem_id');
+				$radio->setLabel('Problem ?');
+				$radio->setValueOptions(
+							$samplearray
+					);
+				echo $this->form($form->add($radio));
+				echo $this->form()->closeTag($form);
+			endif;
+		?>
+	</div>
+</html>

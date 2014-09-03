@@ -1,0 +1,73 @@
+<?php
+$title = 'Add new Galaxy';
+$this->headTitle($title);
+$this->HeadScript()->appendFile($this->basePath().'/public/js/admin_galexy_add.js','text/javascript');
+?>
+<section id="secondary_bar">
+   <div class="breadcrumbs_container">
+       <article class="breadcrumbs"><a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a><div class="breadcrumb_divider"></div>  <a href="<?php echo $this->url('jadmin/admin-galaxy') ?>">Manage Galaxy</a><div class="breadcrumb_divider"></div><a class="current" href="javascript:void(0);">Add Galaxy </a></article>
+   </div>
+</section> 
+<section id="main" class="column"> 
+	<?php if(isset($flashMessages) && count($flashMessages)) : ?>
+	<ul class="session">
+		<?php foreach ($flashMessages as $msg) : ?>
+		<li><?php echo $msg; ?></li>
+		<?php endforeach; ?>
+	</ul>
+	<?php endif; ?>
+	<!--error Message-->
+	<?php if(isset($error) && count($error)) : ?>
+		<?php foreach ($error as $errormsg) : ?>
+		<h4 class="alert_error"><?php echo $errormsg; ?></h4>
+		<?php endforeach; ?>
+	<?php endif; ?>
+	<!--success message-->
+	<?php if(isset($success) && count($success)) : ?>
+	<ul class="success">
+		<?php foreach ($success as $successmsg) : ?>
+		<li><?php echo $successmsg; ?></li>
+		<?php endforeach; ?>
+	</ul>
+	<?php endif; ?>
+	<article class="module width_full">
+		<header><h3><?php echo $this->escapeHtml($title); ?></h3></header>
+    <?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('jadmin/admin-galaxy-add', array('action' => 'add')));
+	$form->prepare();
+	echo $this->form()->openTag($form) . PHP_EOL;?>
+	<div class="module_content">
+		<fieldset>
+			<label>Name*</label>
+			<?php echo $this->formRow($form->get('group_title')) . PHP_EOL;?>
+		</fieldset>
+		<fieldset>
+			<label>SEO Name*</label>
+			<?php echo $this->formRow($form->get('group_seo_title')) . PHP_EOL; ?>
+		</fieldset>
+		<fieldset>
+			<label>Image*</label>
+			<?php echo $this->formRow($form->get('galaxy_image')) . PHP_EOL; ?>
+		</fieldset>
+		<!-- <fieldset> 
+			<label>Galaxy Location</label>
+			<?php //echo $this->formRow($form->get('group_location')) . PHP_EOL;?>
+		</fieldset>-->                                    
+        <fieldset> 
+			<label>Group Discription*</label>
+			<?php echo $this->formRow($form->get('group_discription')) . PHP_EOL;?>
+		</fieldset>		
+		<div class="clear"></div>
+	</div>
+	<footer>
+		<div class="submit_link">
+			<?php echo $this->formInput($form->get('submit')) . PHP_EOL; ?>					
+		</div>
+	</footer>
+	<?php  echo $this->form()->closeTag($form) . PHP_EOL; ?>
+	</article> 
+	<div class="clear"></div>
+    <div class="spacer"></div>
+</section>
+

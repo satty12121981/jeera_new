@@ -1,0 +1,29 @@
+ <html>
+	<?php if(isset($error) && count($error)) : ?>
+	<ul>
+		<?php foreach ($error as $msg) : ?>
+		<li><?php echo $msg; ?></li>
+		<?php endforeach; ?>
+	</ul>
+	<?php endif; ?> 
+	<div id="container">
+		<?php
+		if(isset($form)):
+			$form = $this->form;
+			$form->setAttribute('action', $this->url('spam/spam', array('action' => 'add','group_id'=>$groupData->group_seo_title, 'sub_group_id'=>$SubGroupData->group_seo_title,'group_refer_id'=>$Group_Refer_Id,'system_type_id'=>$System_Type_Id)));
+			$form->prepare();
+			echo $this->form()->openTag($form);
+			echo $this->formRow($form->get('spam_system_type_id'));
+			echo $this->formRow($form->get('spam_problem_id'));
+			echo $this->formRow($form->get('spam_other_content'));
+			echo $this->formRow($form->get('spam_refer_id'));
+
+			if (isset($Spams_exist_check_for_user) && !empty($Spams_exist_check_for_user->spam_report_user_id)) {
+				echo 'Marked Spam';
+			}
+		
+			echo $this->form()->closeTag();
+		endif;
+		?>
+	</div>
+</html>

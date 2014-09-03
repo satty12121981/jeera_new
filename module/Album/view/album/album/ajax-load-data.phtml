@@ -1,0 +1,74 @@
+ 
+<?php if(empty($error)){ ?> 
+ 
+<?php if(count($album_data) > 0) {  
+$n = $page*12;
+foreach ($album_data as $album) : 
+$n++;
+?>
+  <div class="list-albums" id="list-albums_<?php echo $album['data_id'];?>">
+ 
+ <div class="user-action" id="toggle_section_<?php echo $album['data_id'];?>" title="Edit Image">
+
+ </div>
+ <div class="toggle_actions" id="toggle_actions_<?php echo $album['data_id'];?>" style="display:none;">
+ <ul>
+ <?php if($album['data_type'] == 'image'){ ?>
+ <?php  if($user_id == $album_details->album_user_id){ ?>	
+ <li><a class="album_cvr" id="album_cvr_<?php echo $album['data_id'].'|'.$album['album_id'];?>" href="<?php echo $this->url('album/ajaxAlbumCover', array('action' => 'ajaxAlbumCover','album_id'=>$album_details->album_seotitle,'id'=>$album['data_id'])) ?>">Make Cover Photo</a></li>
+ <?php } ?>
+ <?php } ?>
+  <?php   if($user_id == $album['added_user_id']){ ?>
+<li><a class="album_pic_del" id="album_pic_del_<?php echo $album['data_id'];?>" href="<?php echo $this->url('album/ajaxDeleteData', array('action' => 'ajaxDeleteData','album_id'=>$album_details->album_seotitle,'id'=>$album['data_id'])) ?>">Delete This  <?php if($album['data_type'] == 'image'){ echo "Photo"; } else{ echo "Video";}?></a></li>
+ <?php } ?>
+</ul>
+ </div>
+   
+  <?php if($album['data_type'] == 'image'){ ?>
+  <div class="album_image">
+ 
+  <a href="<?php echo $this->url('groups/group-album-data',array('action'=>'file','group_id'=>$planetdetails->galexy_seo_title,'sub_group_id'=>$planetdetails->group_seo_title,'id'=>$album_details->album_seotitle,'count'=>$n));?>">
+		<img src="<?php echo $this->basePath()?>/public/album/<?php echo $album['album_group_id'].'/'.$album['album_id'].'/'.$album['data_content'];?>" height="100" width="276" />
+	</a>
+	</div>
+	
+	<?php } else{ if($album['data_type'] == 'youtube'){
+
+		$url = $album['data_content'];
+		$fetch=explode("v=", $url);
+		$videoid=$fetch[1]; 
+	
+	?>
+	<div class="album_video">
+	  <a href="<?php echo $this->url('groups/group-album-data',array('action'=>'file','group_id'=>$planetdetails->galexy_seo_title,'sub_group_id'=>$planetdetails->group_seo_title,'id'=>$album_details->album_seotitle,'count'=>$n));?>">
+		<img src="http://img.youtube.com/vi/<?php echo $videoid;?>/0.jpg?>" height="100" width="276" />
+	</a>
+	</div>
+	<div class="youtube-data"></div>
+	<?php }} ?>
+  <br>
+    <div class="album-actions" style="display:none;">
+        <a href="<?php echo $this->url('album',
+            array('action'=>'edit', 'album_id' => $album['album_id']));?>">Edit</a>
+        <a href="<?php echo $this->url('album',
+            array('action'=>'delete', 'album_id' => $album['album_id']));?>">Delete</a>
+  </div>
+  </div>
+<?php endforeach;  }else{
+?>
+<div class="clear"></div>
+<div class="no-data">Sorry!!! no more contents in this album</data>
+<script>scrollend = 1;</script>
+<?php
+} ?>
+ 
+<br>
+  <?php }else{  ?>
+	<ul>
+		<?php foreach($error as $msg){ ?>
+			<li><?php echo $msg; ?></li>
+		<?php } ?>
+	</ul>
+  <?php } ?>
+  <div class="clear"></div>
+   

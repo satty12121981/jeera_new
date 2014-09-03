@@ -1,0 +1,84 @@
+<?php
+$title = 'Edit Galaxy';
+$this->headTitle($title);
+?>
+<section id="secondary_bar">
+    <div class="breadcrumbs_container">
+        <article class="breadcrumbs"><a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a><div class="breadcrumb_divider"></div>  <a href="<?php echo $this->url('jadmin/admin-galaxy') ?>">Manage Galaxy</a><div class="breadcrumb_divider"></div><a class="current" href="javascript:void(0);">Edit Galaxy </a></article>
+    </div>
+</section>
+<section id="main" class="column">    
+    <?php if (isset($flashMessages) && count($flashMessages)) : ?>
+        <ul class="session">
+            <?php foreach ($flashMessages as $msg) : ?>
+                <li><?php echo $msg; ?></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+    <?php if (isset($error) && count($error)) : ?>
+        <ul class="error">
+            <?php foreach ($error as $errormsg) : ?>
+                <li><?php echo $errormsg; ?></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+    <?php if (isset($success) && count($success)) : ?>
+        <ul class="success">
+            <?php foreach ($success as $successmsg) : ?>
+                <li><?php echo $successmsg; ?></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+    <article class="module width_full">
+        <header><h3><?php echo $this->escapeHtml($title); ?></h3></header>
+	<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('jadmin/admin-galaxy-edit', array('id' => $this->id)));
+	$form->prepare();
+
+	echo $this->form()->openTag($form) . PHP_EOL;
+	?>
+    <div class="module_content">
+		<fieldset>
+			<label>Name*</label>
+			<?php echo $this->formRow($form->get('group_title')) . PHP_EOL; ?>
+        </fieldset>
+        <fieldset>
+			<label>SEO Name*</label>
+                <?php echo $this->formRow($form->get('group_seo_title')) . PHP_EOL; ?>
+		</fieldset>
+        <?php
+		 
+		if (isset($groupPhoto->group_photo_id) && !empty($groupPhoto->group_photo_id)) {
+        ?>
+        <fieldset style="width:13%; float:left; text-align: center; padding: 5px;"> 
+			<div class="grp_img">
+				<img src="<?php echo $this->basePath() ?>/public/datagd/galexy/<?php echo $groupPhoto->group_photo_photo; ?>" height="125px" width="125px">
+			</div>
+         </fieldset>
+        <div class="clear"></div>       
+        <?php } ?>
+        <fieldset>  
+			<label>Image*</label>
+			<?php echo $this->formRow($form->get('galaxy_image')) . PHP_EOL; ?>
+		</fieldset>
+	   <!-- <fieldset>   
+			<label>Galaxy Location</label>
+			<?php //echo $this->formRow($form->get('group_location')) . PHP_EOL; ?>
+		</fieldset>-->
+		<fieldset> 
+			<label>Group Discription*</label>
+			<?php echo $this->formRow($form->get('group_discription')) . PHP_EOL; ?>
+		</fieldset>
+        <div class="clear"></div>
+    </div>
+    <footer>
+		<div class="submit_link">
+		<?php echo $this->formInput($form->get('submit')) . PHP_EOL; ?>
+		</div>
+    </footer>
+	<?php echo $this->form()->closeTag($form) . PHP_EOL; ?>
+	</article> 
+    <div class="clear"></div>
+    <div class="spacer"></div>
+</section>

@@ -1,0 +1,69 @@
+ 
+<?php $this->HeadScript()->appendFile($this->basePath().'/public/js/messages.js','text/javascript'); ?>
+<script>
+      jQuery(document).ready(function ($) {
+        "use strict";
+        $('.message-list').perfectScrollbar({useBothWheelAxes: true});
+		//$('#message_lists').scrollTop($('#message_lists')[0].scrollHeight);
+		
+      });
+    </script>
+ <?php if(isset($this->layout()->identity) && $this->layout()->identity!=NULL) { 
+	echo $planetSugessions;
+ }else{ ?>
+	<div class="video-head">Some text here explaining Galaxies</div>
+<?php } ?>
+<div class="galaxy-container">
+	<div class="message-outer">
+		<div class="message-left">
+			<div class="search-message">
+				<input name="msg_user_search" id="msg_user_search" type="text" class="msg-search" placeholder="Search from users" />
+				<input type="image" class="msg-search-butn" src="<?php echo $this->basePath() ?>/public/images/search-butn.png" />
+				<div class="msg-delete"> </div>
+				<div id="srch_friends" ></div>
+			</div>
+			<div class="message-list">
+				<?php  foreach($usersWithMessagesData as $messages){ ?>
+				<div class="msg-list-outer" id="msg-list-outer<?php echo $messages->message_user; ?>">
+					<div class="msg-user-info">
+						<div class="messager-img">
+						<a href="javascript:void(0)" id="<?php echo $messages->message_user; ?>" class="listMessage">
+							<?php if($messages->profile_photo!=''){ ?>
+								<img src="<?php echo $this->basePath(); ?>/public/datagd/profile/<?php echo $messages->user_id ?>/66x66/<?php echo $messages->profile_photo; ?>" alt="" />
+							<?php }else if($messages->user_register_type == 'facebook' && $messages->user_fbid!=''){ ?>
+								<img src="https://graph.facebook.com/<?php echo $messages->user_fbid; ?>/picture?width=66&&height=66" />
+							<?php }else{ ?>
+								<img src="<?php echo $this->basePath(); ?>/public/images/noimg.jpg" alt="" />
+							<?php } ?>
+						</a>
+						</div>
+						<div class="messager-name"><?php echo $messages->user_given_name ; ?></div>
+						<div class="delete-msg">	
+							<?php if($messages->user_message_receiver_id == $this->layout()->identity->user_id && $messages->user_message_receiver_viewed == 0){ ?>
+							<span class="unread"></span>
+							<?php }else{ ?>
+							<span class="read-msg"></span>
+							<?php } ?>
+							<div class="msg-date">
+								<a href="javascript:void(0)" id="<?php echo $messages->message_user; ?>" class="listMessage">
+							<?php echo date("d/m/Y",strtotime($messages->user_message_added_timestamp)); ?>
+							</a>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="msg-short"><a href="javascript:void(0)" id="<?php echo $messages->message_user; ?>" class="listMessage"><?php echo substr($messages->user_message_content,0,50) ?> ...</a></div>
+					
+				</div>
+				<?php } ?>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</div>		
+		<div class="message-right"> 
+ 
+		</div>
+		<div class="clear"></div>
+    </div>
+	<div class="clear"></div>
+</div>

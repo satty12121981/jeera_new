@@ -1,0 +1,62 @@
+<?php $this->HeadScript()->appendFile($this->basePath().'/public/js/connections.js','text/javascript'); ?>
+<script>
+var profile_name = '<?php echo $profilename; ?>'
+</script>  
+<?php
+	if(!empty($error)){
+		?>
+		<div class="error">
+			<ul>
+			<?php foreach($error as $msg ){  
+				echo "<li>".$msg."</li>";
+				} ?>
+			</ul>
+		</div>
+		<?php 
+	}else{
+ ?>
+<?php echo $this->profileTopWidget; ?>  
+<div class="profile-tabs2">
+	<div id="tabs">
+		<div class="tabs-outer tabs-fullwidth">
+			  <ul>
+					<li><a href="<?php echo $this->url('memberprofile',array('member_profile'=>$profilename));?>" class="connection_tab">Connections</a></li>
+					<li><a href="<?php echo $this->url('memberprofile/planets',array('member_profile'=>$profilename));?>" class="planet_tab">Planets</a></li>
+					<li><a href="<?php echo $this->url('memberprofile/photos',array('member_profile'=>$profilename));?>" class="photo_tab">Photos</a></li>
+			  </ul>
+			  <div class="clear"></div>
+		  </div>
+		  <div id="tabs-1">
+			<?php foreach($friends as $list){ ?>
+				<div class="connection-list-outer">
+					<div class="connection-img profile-image-comn">
+					<a href="<?php echo $this->url('memberprofile',array('member_profile'=>$list->user_profile_name)) ?>">
+					<?php if($list->profile_photo!=''){ ?><img src="<?php echo $this->basePath(); ?>/public/datagd/profile/<?php echo $list->user_id; ?>/45x45/<?php echo $list->profile_photo; ?>" alt="<?php echo $list->user_given_name; ?>" />
+					<?php }else if($list->user_register_type == 'facebook' && $list->user_fbid!=''){ ?>
+						<img src="https://graph.facebook.com/<?php echo $list->user_fbid; ?>/picture?width=45&&height=45" />
+					<?php }else{ ?>	
+					<img src="<?php echo $this->basePath(); ?>/public/images/profile-noimage.jpg" alt="<?php echo $list->user_given_name; ?>" />
+					<?php  } ?>
+					</a>
+					</div>
+					<div class="connection-name"><a href="<?php echo $this->url('memberprofile',array('member_profile'=>$list->user_profile_name)) ?>"><?php echo $list->user_given_name; ?></a></div>
+					<div class="connection-status">
+						<?php if($list->is_friend){ ?>
+							<span>Friends</span>
+						<?php }else if($list->is_requested){ ?>
+							<span>Friend request sent</span>
+						<?php }else if($list->get_request){ ?>
+							<span id="connection-status_<?php echo $list->user_id; ?>"><a href="javascript:void(0)" id="accept_friend_<?php echo $list->user_id; ?>" class="accept_friend">Accept request</a></span>
+						<?php }else{ ?>
+							<?php if($list->user_id != $logged_id){ ?>							
+							 
+								<span id="connection-status_<?php echo $list->user_id; ?>"><a href="javascript:void(0)" id="add_friend_<?php echo $list->user_id; ?>" class="send_friend_request">Add Friend</a></span>
+							<?php } ?>
+						<?php } ?>
+					</div>
+				</div>
+			<?php } ?>
+		  </div>
+	</div>
+</div>
+<?php  } ?>

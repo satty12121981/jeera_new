@@ -1,0 +1,51 @@
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places" type="text/javascript" charset="utf-8"></script>
+
+<?php
+$this->HeadLink()->appendStylesheet($this->basePath().'/public/css/album.css'); 
+// module/Album/view/album/album/add.phtml:
+
+$title = 'Add new album';
+$this->headTitle($title);
+?>
+<script>
+var siteurl = "<?php echo $this->basePath(); ?>" ;
+
+
+</script>
+<h3><?php echo $this->escapeHtml($title); ?></h3>
+<?php
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('album/album-create', array('action' => 'add')));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('album_id'));
+echo $this->formHidden($form->get('album_user_id'));
+echo $this->formHidden($form->get('album_group_id'));
+echo $this->formRow($form->get('album_title'));
+echo $this->formRow($form->get('album_location'));
+?>
+<br>
+<div id="dragandrophandler">Drag & Drop Files Here</div>
+<br>
+<div id="status1"></div>
+
+<a  id="add_planet_video">Add Video Url (youtube)</a>
+<br>
+<div id="video_urlbox">
+<div id='TextBoxesGroup'>
+	
+	
+<div id="TextBoxDiv1">
+		<label><span>URL&nbsp;#1 :</span> <input type='text' name='planet_video[]' id='textbox1' ></label>
+	</div>
+</div>
+<br>
+<input type='button' value='Add More' id='addButton'>
+<input type='button' value='Remove' id='removeButton'>
+</div>
+<br>
+<?php
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();

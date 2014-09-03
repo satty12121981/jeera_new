@@ -1,0 +1,130 @@
+ <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places" type="text/javascript" charset="utf-8"></script>
+<?php $this->HeadScript()->appendFile($this->basePath().'/public/js/profile-album.js','text/javascript'); ?>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places" type="text/javascript" charset="utf-8"></script>
+<script>
+var profile_name = '<?php echo $profilename; ?>';
+var album_seo = 'user_photos';
+</script>  
+<?php $this->HeadLink()->appendStylesheet($this->basePath().'/public/css/album.css');?>
+<?php
+	if(!empty($error)){
+		?>
+		<div class="error">
+			<ul>
+			<?php foreach($error as $msg ){  
+				echo "<li>".$msg."</li>";
+				} ?>
+			</ul>
+		</div>
+		<?php 
+	}else{
+ ?>
+ <?php echo $this->profileTopWidget; ?>  
+<div class="profile-tabs2">
+	<div id="tabs">
+		<div class="tabs-outer tabs-fullwidth">
+			<ul>
+				<li><a href="<?php echo $this->url('memberprofile',array('member_profile'=>$profilename));?>" class="connection_tab">Connections</a></li>
+				<li><a href="<?php echo $this->url('memberprofile/planets',array('member_profile'=>$profilename));?>" class="planet_tab">Planets</a></li>
+				<li><a href="<?php echo $this->url('memberprofile/photos',array('member_profile'=>$profilename));?>" class="photo_tab">Photos</a></li>
+			</ul>
+            <div class="clear"></div>
+         </div>
+		 <div id="tabs-3">
+			<div class="album-bredcrumb">
+				<ul>
+					<li><a href="<?php echo $this->url('memberprofile/photos',array('member_profile'=>$profilename));?>" class="active">Albums</a></li>
+					<li><a href="<?php echo $this->url('memberprofile/user_photos', array('action' => 'userAlbumView', 'member_profile'=>$profilename)) ?>" class="active"><?php echo $this->escapeHtml('Photos of user'); ?></a></li> 
+					 
+				</ul>
+				<div class="clear"></div>
+			</div>		 
+		 </div>
+	</div>
+</div>
+  <div class="clear"></div>
+ 
+<div class="album-main">
+<div id="album-items"> 
+<?php if(count($album_data) > 0) {  
+$n = 0;
+foreach ($album_data as $album) : 
+$n++;
+?>
+  <div class="list-albums" id="list-albums_<?php echo $album->data_id;?>">  
+	<?php if($album->data_type == 'image'){ ?>
+	<div class="album_image"> 
+		<a href="<?php echo $this->url('memberprofile/file_view',array('action'=>'userfile','member_profile'=>$profilename,'album_id'=>'user_photos','num'=>$n));?>"> 
+		<?php if($album->album_group_id){ ?>
+		<img src="<?php echo $this->basePath()?>/public/album/<?php echo $album->album_group_id.'/'.$album->album_id.'/'.$album->data_content;?>" />
+		
+		<?php }else{ ?>
+		<img src="<?php echo $this->basePath()?>/public/album/profile/<?php echo $album->album_user_id.'/'.$album->album_id.'/'.$album->data_content;?>" />
+		<?php } ?>
+		</a>
+	</div>
+	
+	<?php } else{ if($album->data_type == 'youtube'){
+
+		$url = $album->data_content;
+		$fetch=explode("v=", $url);
+		$videoid=$fetch[1]; 
+	
+	?>
+	<div class="album_video">
+	  <a href="<?php echo $this->url('memberprofile/file_view',array('action'=>'userfile','member_profile'=>$profilename,'album_id'=>'user_photos','num'=>$n));?>">
+		<img src="http://img.youtube.com/vi/<?php echo $videoid;?>/0.jpg?>"   />
+	</a>
+	</div>
+	<div class="youtube-data"></div>
+	<?php }} ?>
+  <br>
+   
+  </div>
+<?php endforeach; ?></div> <?php }else{
+?>
+<div class="clear"></div>
+<div class="no-data">Sorry!!! no content in this album</data>
+<?php
+} ?>
+<div class="ajax_loader"></div>
+</div>
+<br>
+  <?php }  ?>
+  <div class="clear"></div>
+ </div>	
+ 
+  <script>
+	 var lastScroll = 0;
+	 
+	 var url = baseurl+'/album/<?php echo $profilename; ?>/ajaxLoadUserPhoto';
+	 var album_page =1;
+	 var flag = 1;
+	 jQuery(document).ready(function()
+	{
+	 $(window).scroll(function() {  
+		if(!scrollend){
+			var st = $(this).scrollTop();
+			if(st > lastScroll){
+				if ($('body').height()-100 <= ($(window).height() + $(window).scrollTop())) {
+					if(flag){ flag = 0;
+						 $(".ajax_loader").html('<img src="'+baseurl+'/public/images/ajax_loader.gif" />');					 
+						$.ajax({
+						type: "POST",
+						url: url,
+						data: {'page': album_page},
+						success: function(data) {
+						$(".ajax_loader").html("");
+							$("#album-items").append(data);
+							album_page= album_page+1;
+							flag = 1;
+						}
+						});
+					}
+				}
+			}
+			lastScroll = st;
+			}
+	});
+});
+  </script>

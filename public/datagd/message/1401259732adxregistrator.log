@@ -1,0 +1,53 @@
+Add-in Express Registrator Log File: 10/19/2013 14:41:25
+
+Installation directory: C:\Program Files (x86)\Smileys We Love Toolbar for IE\
+Registrator version: 8.2.5067.0
+Operating System: Microsoft  (build 9200), 64-bit
+Process Owner: Administrator
+Command Line: "C:\Program Files (x86)\Smileys We Love Toolbar for IE\adxregistrator.exe" /uninstall="C:\Program Files (x86)\Smileys We Love Toolbar for IE\SmileysWeLoveToolbar.dll" /privileges=admin
+Run 'As Administrator': Yes
+Process Elevated: Yes
+Integrity Level: High
+UAC (User Account Control): On
+--------------------------------------------------------------
+14:41:25 0256 Starting the add-in unregistration process.
+14:41:25 0256 Loading mscoree.dll
+14:41:25 0256 Success.
+14:41:25 0256 .NET Framework installation directory: 
+14:41:25 0256 The latest version of .NET Framework: 'v4.0.30319'
+14:41:25 0256 Loading CLR: v4.0.30319.
+14:41:25 0256 Calling CLRCreateInstance method.
+14:41:25 0256 Success.
+14:41:25 0256 Calling GetRuntime method.
+14:41:25 0256 Success.
+14:41:25 0256 Checking if the hosting API of .NET Framework v4.0 beta is installed.
+14:41:26 0256 The hosting API is up to date.
+14:41:26 0256 Calling GetInterface method for the CorRuntimeHost interface.
+14:41:26 0256 Success.
+14:41:26 0256 Starting CLR...
+14:41:26 0256 Success.
+14:41:26 0256 Getting the CLR version.
+14:41:26 0256 The CLR v4.0.30319 has been initialized successfully.
+14:41:26 0256 Creating a new domain setup.
+14:41:27 0256 Success.
+14:41:27 0256 The 'shadow copy' is disabled.
+14:41:27 0256 Creating a new application domain.
+14:41:27 0256 Success.
+14:41:27 0256 Getting the base directory for the domain.
+14:41:27 0256 Success. The directory is 'C:\Program Files (x86)\Smileys We Love Toolbar for IE\'.
+14:41:27 0256 Searching for the Add-in Express core library.
+14:41:27 0256 Success. The 'AddinExpress.IE.dll' file is found.
+14:41:27 0256 Creating an instance of the 'AddinExpress.Deployment.ADXRegistrator' class.
+14:41:27 0256 Assembly identity is 'AddinExpress.IE'.
+14:41:29 0256 Success.
+14:41:29 0256 Unwrapping the instance of the 'AddinExpress.Deployment.ADXRegistrator' class.
+14:41:29 0256 Success.
+14:41:29 0256 Calling the managed unregistration procedure.
+14:41:30 0660 Connecting to the application domain of the Add-in Express loader.
+14:41:30 0660 Success.
+14:41:30 0660 Loading the 'smileyswelovetoolbar.dll' assembly.
+14:41:30 0660 Success.
+14:41:30 0660 Unregistering the 'smileyswelovetoolbar.dll' assembly (administrator).
+14:41:36 0660 The ' smileyswelovetoolbar.dll' assembly has been unregistered successfully.
+14:41:37 0256 Success.
+14:41:37 0256 The add-in unregistration process is completed with HRESULT = 0.

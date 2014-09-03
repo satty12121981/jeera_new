@@ -1,0 +1,34 @@
+<?php
+$title = 'Delete Planet';
+$this->headTitle($title);
+$this->HeadScript()->appendFile($this->basePath().'/public/js/admin_activity_delete.js','text/javascript');
+?>
+<section id="secondary_bar">
+    <div class="breadcrumbs_container">
+        <article class="breadcrumbs"><a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a><div class="breadcrumb_divider"></div>  <a href="<?php echo $this->url('jadmin/admin-activity') ?>">List Activity</a><div class="breadcrumb_divider"></div><a class="current" href="javascript:void(0);">View Activity</a></article>
+    </div>
+</section>
+<section id="main" class="column">
+    <article class="module width_full">
+        <header><h3><?php echo $this->escapeHtml($title); ?></h3></header>
+        <div class="module_content" id="activity_delete_container">
+            <fieldset>
+                <label>Delete Activites :</label>				 
+				Do you want to remove activity <?php echo $activityData->group_activity_title; ?> ? It will remove all members joined in the activity and all recent activities under this activity...
+				<form action="" method="post">
+					<input type="button" value="Yes" Name="activity_delete" id="delete_activity" />
+					<input type="submit" value="No" Name="activity_delete" />
+					
+				</form>				
+            </fieldset>	 
+            <div class="clear"></div>
+        </div>
+		<input type="hidden" value="<?php echo $activityData->group_activity_id; ?>" id="hid_activity_id" />
+        <footer>
+            <div class="submit_link">
+            </div>
+        </footer>
+	</article><!-- end of post new article -->
+    <div class="clear"></div>
+    <div class="spacer"></div>
+</section>

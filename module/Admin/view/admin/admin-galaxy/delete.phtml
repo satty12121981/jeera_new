@@ -1,0 +1,58 @@
+<?php
+	$title = 'Delete Country';
+	$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php if(isset($flashMessages) && count($flashMessages)) : ?>
+<ul class="session">
+    <?php foreach ($flashMessages as $msg) : ?>
+    <li><?php echo $msg; ?></li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+<!--error Message-->
+<?php if(isset($error) && count($error)) : ?>
+<ul class="error">
+    <?php foreach ($error as $errormsg) : ?>
+    <li><?php echo $errormsg; ?></li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+<!--success message-->
+<?php if(isset($success) && count($success)) : ?>
+<ul class="success">
+    <?php foreach ($success as $successmsg) : ?>
+    <li><?php echo $successmsg; ?></li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+<section id="secondary_bar">
+	<div class="breadcrumbs_container">
+		<article class="breadcrumbs"><a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a><div class="breadcrumb_divider"></div>  <a  class="current" href="<?php echo $this->url('jadmin/admin-galaxy') ?>">Manage Galaxy</a><div class="breadcrumb_divider"></div> 
+		<a href="javascript:void(0);">Delete</a>
+		</article>
+    </div>
+</section>
+<section id="main" class="column">
+	<article class="module width_3_quarter"> 
+<?php if($planets_count) : ?>
+		<p>You can not delete Galaxy  <b>'<?php echo $this->escapeHtml($group->group_title); ?>'</b>, The tables has data related to this Galaxy</p> 
+		<a href="<?php echo $this->url('jadmin/admin-galaxy'); ?>">Back</a>		
+<?php else : ?>
+	<p>Are you sure that you want to delete 
+  '<?php echo $this->escapeHtml($group->group_title); ?>'?
+</p>
+<?php 
+$url = $this->url('jadmin/admin-galaxy-delete', array( 'id'=>$this->id)); ?>
+<form action="<?php echo $url; ?>" method="post">
+<div>
+  <input type="hidden" name="id" value="<?php echo (int)$group->group_id; ?>" />
+  <input type="submit" name="del" value="Yes" />
+  <input type="submit" name="del" value="No" />
+</div>
+</form>
+<?php endif; ?>
+	</article><!-- end of content manager article -->
+	<div class="clear"></div>
+	<div class="spacer"></div>
+</section>

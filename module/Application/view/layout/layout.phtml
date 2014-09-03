@@ -1,0 +1,194 @@
+<?php 
+if (defined('RUNNING_FROM_ROOT')) {
+  //$this->plugin('basePath')->setBasePath($this->basePath().'/public');
+} 
+
+?>
+<?php echo $this->doctype(); ?> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('1625 (Jeera) ::'. $this->translate('Explore Yourself'))->setSeparator(' - ')->setAutoEscape(false); ?>
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0'); ?>
+        <!-- external styles -->
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/favicon.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                        ->prependStylesheet($this->basePath() . '/public/css/style.css')
+						->prependStylesheet($this->basePath() . '/public/css/eventCalendar.css')
+						->prependStylesheet($this->basePath() . '/public/css/eventCalendar_theme_responsive.css')   
+						->prependStylesheet($this->basePath() . '/public/css/perfect-scrollbar.css');   
+ 						
+		?>
+        <!-- Scripts -->
+		<?php $this->HeadScript()->prependFile($this->basePath().'/public/js/jquery-1.10.2.min.js','text/javascript'); ?>
+		<?php $this->HeadScript()->appendFile($this->basePath().'/public/js/common.js','text/javascript'); ?>
+		<?php $this->HeadScript()->appendFile($this->basePath().'/public/lib/datejs/build/date-en-US.js','text/javascript'); ?>
+		<?php $this->HeadScript()->appendFile($this->basePath().'/public/js/jquery.mousewheel.js','text/javascript'); ?>
+		<?php $this->HeadScript()->appendFile($this->basePath().'/public/js/perfect-scrollbar.js','text/javascript'); ?>
+		<?php $this->HeadScript()->appendFile($this->basePath().'/public/js/jquery.eventCalendar.js','text/javascript'); ?>
+		<?php echo $this->headScript(); ?>
+		<script>var baseurl = '<?php echo $this->basePath(); ?>'</script>
+		 
+ 
+	<!-- Theme CSS file: it makes eventCalendar nicer -->
+	<?php if(isset($this->layout()->identity) && $this->layout()->identity!=NULL) { ?>
+	<script>
+		 
+		var eventsWithHumanDateFormat = [ <?php foreach($this->layout()->identity->activity as $activity){ ?> { "startDate": "<?php echo $activity['startDate']; ?>", "classEvent": "<?php echo $activity['title']; ?>", "title": "<?php echo $activity['title']; ?>", "description": "<?php echo $activity['description']; ?>t", "url": "<?php echo $this->url('activity/activity-view',array('action' => 'view','group_id'=>$activity['parent_seo_title'], 'planet_id'=>$activity['group_seo_title'], 'id'=> $activity['url'])) ?>" },<?php } ?> ];
+		$(document).ready(function() {
+			currant_day = <?php echo date("d");?>;
+			currant_month = <?php echo date("m")-1;?>;
+			currant_year = <?php echo date("Y");?>;
+			$("#eventCalendarHumanDate").eventCalendar({
+				jsonData       : eventsWithHumanDateFormat,
+				jsonDateFormat : 'YYYY-MM-DD HH:MM:SS',
+				eventsLimit    : 200,
+				currentDate    : new Date(<?php echo date("Y");?>, <?php echo date("m")-1;?>, <?php echo date("d");?>, 0, 0, 0)
+			});
+		});
+	</script>
+	
+	<?php } ?>
+	</head>
+    <body>    
+        <div class="outer-container">
+			<div class="left-container">
+				<div class="left-inner">
+					<div class="logo"><img src="<?php echo $this->basePath(); ?>/public/images/jeera-logo.png" alt="" /></div>
+					<?php if(isset($this->layout()->identity) && $this->layout()->identity!=NULL) { ?>
+					<div class="profile-left-outer">
+						<div class="profile-img-name">
+							<a href="<?php echo $this->url('memberprofile',array('member_profile'=>$this->layout()->identity->user_profile_name)) ?>" class="profile-img-link">
+								<?php if($this->layout()->identity->profile_pic!=''){ ?>
+								<img src="<?php echo $this->basePath(); ?>/public/datagd/profile/<?php echo $this->layout()->identity->user_id ?>/66x66/<?php echo $this->layout()->identity->profile_pic; ?>" alt="" />
+								<?php }else if($this->layout()->identity->user_register_type == 'facebook' && $this->layout()->identity->user_fbid!=''){ ?>
+									<img src="https://graph.facebook.com/<?php echo $this->layout()->identity->user_fbid; ?>/picture?width=66&&height=66" />
+								<?php }else{ ?>
+								<img src="<?php echo $this->basePath(); ?>/public/images/noimg.jpg" alt="" />
+								<?php } ?>
+							</a>
+							<a href="<?php echo $this->url('memberprofile',array('member_profile'=>$this->layout()->identity->user_profile_name)) ?>" class="profile-name"><?php echo $this->layout()->identity->user_given_name;?></a>
+							<div class="clear"></div>
+						</div>
+						<div class="profile-link">
+							<a href="<?php echo $this->url('memberprofile',array('member_profile'=>$this->layout()->identity->user_profile_name)) ?>">My Profile</a>
+							<?php if($this->layout()->identity->user_email==''){ ?>
+							<a href="javascript:void(0)" id="email_alert"><img src="<?php echo $this->basePath(); ?>/public/images/red-alert.png" /></a>
+							<div id="email_alert_messsage" style="display:none">Please club your account with any one of your email address, so that you got all our updates in your mail.</div>
+							<?php } ?>
+						</div>
+						<div class="logout-menu">
+							<a href="<?php echo $this->url('user/logout') ?>">Logout</a>
+							<a href="#">Help</a>
+						</div>
+					</div>
+					<?php } ?>
+					<div class="left-links">
+						<ul>
+							<?php if(isset($this->layout()->identity) && $this->layout()->identity!=NULL) { ?>
+							<li class="message-menu"><a href="<?php echo $this->url('home');?>" <?php if($this->layout()->page == 'Feeds'){ ?>class="active" <?php } ?>>Feeds<span id="msgs_count"></span></a></li>
+							<li class="message-menu"><a href="<?php echo $this->url('messages') ?>" <?php if($this->layout()->page == 'Messages'){ ?>class="active" <?php } ?>>Messages<span id="msgs_count"></span></a></li>
+							<script>loadNewMessages()</script>
+							<?php } ?>
+							<li class="galaxy-menu"><a href="<?php echo $this->url('galaxy');?>" <?php if($this->layout()->page == 'Home'){ ?>class="active" <?php } ?>>Galaxy</a></li>
+							<li class="planet-menu"><a href="<?php echo $this->url('groups/planet',array('group_id'=>'all'));?>" <?php if($this->layout()->page == 'Planet'){ ?>class="active" <?php } ?>>Planet</a></li>
+							<li class="activity-menu"><a href="<?php echo $this->url('activity/popular');?>" <?php if($this->layout()->page == 'Activities'){ ?>class="active" <?php } ?>>Activities</a></li>
+						</ul>
+					</div>  
+					<div id="eventCalendarHumanDate"></div>					
+				</div>
+			</div>
+			<div class="right-container">
+			<?php if(isset($this->layout()->identity) && $this->layout()->identity!=NULL) { ?>
+				 <div class="header-container">
+        	<div class="header-inner2">
+            	<div class="search-icon"></div>
+                <div class="search-header">
+                	<input type="text" placeholder="Search" id="common_search" /><input name="" type="image" src="<?php echo $this->basePath() ?>/public/images/search-butn2.png" />
+                </div>
+				<div id="quick_search" class="quick_search">
+					 
+				</div>
+                <div class="header-icon">
+					<script>ajaxGetConnectionCount();</script>
+                	<ul>
+                    	<li class="connection-noti" id="connection-noti"><a href="javascript:void(0)" class="connection_list"><span class="notifc-number"></span></a></li>
+                        <li class="message-noti" id="message-noti"><a href="#" class="message_list">
+						<span class="notifc-number" id="top_msg_count"></span>
+						</a></li>
+                        <li class="topnav" id="topnav"><a href="javascript:void(0)" class="notification_list"></a>
+						<span class="all-notifc-number" id="top_msg_count"></span>
+						</li>
+                    </ul>
+					 
+					<div id="signin_menu">
+						<div class="notification-list">
+							<div class="planet-notification">
+								<a href="#">Lorem ipsum dolor sit amet, conse ...</a>
+							</div>
+							<div class="planet-notification">
+								<a href="#">Lorem ipsum dolor sit amet, conse ...</a>
+							</div>
+							<div class="activity-notification">
+								<a href="#">Lorem ipsum dolor sit amet, conse ...</a>
+							</div>
+							<div class="planet-notification">
+								<a href="#">Lorem ipsum dolor sit amet, conse ...</a>
+							</div>
+						</div>
+						<div class="notification-see_all"><a href="<?php echo $this->url('notifications') ?>">See All</a></div>
+					</div>
+						
+					 
+                    <div id="message_menu">
+                      	 
+                         
+                         
+                         
+                  	</div>
+                    
+                    <div id="connection_menu">
+                      	 
+                  	</div>
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+				<?php }else{?>
+					<div class="header-container">
+					<div class="header-inner">
+						<form id="user_login" name="user_login" method="post" action="<?php echo $this->url('user/ajax_login') ?>">
+						<div class="signup-butn"><a href="<?php echo $this->url('user/register') ?>">Sign up</a></div>
+							<div class="login-form">
+								<div class="login_error"></div>
+								<div class="input-outer"><input name="user_email" id="user_email" type="text" placeholder="Email" /></div>
+								
+								<div class="input-outer"><input name="user_password" id="user_password" type="password" placeholder="Password" />
+								
+								<div class="forgot-pass"><a href="<?php echo $this->url('user/forgotPassword'); ?>">Forgot password</a></div>
+								</div>
+								
+								<div class="login-butn"><input type="image" src="<?php echo $this->basePath(); ?>/public/images/signin-butn.png" alt="Login" /></div>
+								<div class="remember-me"><span>Keep me logged in</span> 
+								<input type="checkbox" value="1" name="rememberme" checked="checked"></div>
+								<div class="clear"></div>
+							</div>
+							<div class="login-with-fb">
+								or <a href="<?php echo $this->url('user/fblogin') ?>"><img src="<?php echo $this->basePath(); ?>/public/images/fb-icon.png" alt="" /></a>
+							</div>
+							
+							</form>
+					<div class="clear"></div>
+					</div>
+				</div>
+				<?php } ?>
+				<div class="contant-container">
+					<?php echo $this->content; ?>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<script>ajaxGetNotificationCount();</script>
+    </body>
+</html>
+

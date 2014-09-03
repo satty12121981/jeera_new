@@ -1,0 +1,21 @@
+<?php $this->HeadScript()->appendFile($this->basePath().'/public/js/notification.js','text/javascript'); ?>
+<div id="notification_list_outer" class="notification_list_outer">
+<?php if(isset($this->layout()->identity) && $this->layout()->identity!=NULL) { 
+	echo $planetSugessions;
+ }else{ ?>
+	<div class="video-head">Some text here explaining Galaxies</div>
+<?php } ?>
+<?php 
+$i=0;
+foreach($notification_list as $list){ $i++; ?>
+<div class="activity-notification">
+	<a href="#"><?php echo $list->user_notification_content; ?></a>
+</div>
+<?php } ?>
+<?php if($i==0||$i<20){
+	echo "No more notifications are exist";
+}else{
+	echo '<a href="javascript:void(0)" id="notification_loadmore">Load more</a>';
+}
+?>
+</div>

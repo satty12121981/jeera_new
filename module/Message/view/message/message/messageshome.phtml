@@ -1,0 +1,213 @@
+<?php echo $this->headScript() ?>
+<?php echo $this->headLink() ?>
+<script>
+    $(document).ready(function(e)
+    {
+        $('#messagearea').perfectScrollbar();
+        //code for loading ALL sub groups
+        $('#messagesend').live('click', function(e){
+
+            var url = "/message/messageprocess/" + $("#DestUserId").val();
+
+            var callback = $.ajax({
+                type: "POST",
+                url: url,
+                data: $("textarea#user_message_content").serialize(), // serializes the form's elements.
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                success: function(data)
+                {
+                    $('#messagelistcontainer').html(data);
+                    $('.ajax-file-upload-progress').hide();
+                    $('.ajax-file-upload-filename').hide();
+                    $('.ajax-file-upload-statusbar').hide();
+
+                    $('#status').hide();
+                    $('#user_message_content').val('');
+                },
+                error: function(msg)
+                {
+                    alert(msg);
+                }
+            });
+        });
+        var settings = {};
+        var globstr = "";
+
+        $('#user_message a').live('click', function(e){
+
+            "use strict";
+
+            var url = "/message/messageslist/" + $(this).text();
+
+            this.globstr = $(this).text();
+
+            e.preventDefault();
+
+            var callback = $.ajax({
+                type: "POST",
+                url: url,
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                success: function(data)
+                {
+                    //e.preventDefault();
+                    $('#messagelistcontainer').html(data);
+
+
+                },
+                error: function(msg)
+                {
+                    alert(msg);
+                }
+            });
+
+            var url1 = "/message/messagearea/" + $(this).text();
+
+            this.globstr = $(this).text();
+
+           // e.preventDefault();
+
+            var callback1 = $.ajax({
+                type: "POST",
+                url: url1,
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                success: function(data)
+                {
+                    $('#messageareacontainer').show();
+                    $('#messageareacontainer').html(data);
+
+                },
+                error: function(msg)
+                {
+                    alert(msg);
+                }
+            });
+
+        });
+
+
+
+        $('#btnClearAll').live('click', function(e){
+
+            e.preventDefault();
+
+            var url = "/message/messagesdelete/" + $("#DestUserId").val();
+
+            var callback = $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    Type:"selected"
+                },
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                success: function(data)
+                {
+                    //e.preventDefault();
+                    $('#messagelistcontainer').html(data);
+                    $('#messageareacontainer').show();
+
+                },
+                error: function(msg)
+                {
+                    alert(msg);
+                }
+            });
+        });
+
+        $('#messageDelete').live('click', function(e){
+
+            e.preventDefault();
+            var values = $('input:checkbox:checked.group1').map(function () {
+                return this.value;
+            }).get();
+
+            var url = "/message/messagesdelete/" + $("#DestUserId").val();
+
+            var callback = $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    SelectedMessageId: values,
+                    Type:"selected"
+                },
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                success: function(data)
+                {
+                    //e.preventDefault();
+                    $('#messagelistcontainer').html(data);
+                    $('#messageareacontainer').show();
+
+                },
+                error: function(msg)
+                {
+                    alert(msg);
+                }
+            });
+        });
+
+    });
+</script>
+
+<?php
+$title = 'Welcome User';
+$this->headTitle($title);
+
+if(isset($flashMessages) && count($flashMessages)) :
+    ?>
+    <ul>
+        <?php foreach ($flashMessages as $msg) : ?>
+            <li><?php echo $msg; ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+<table border="2" width="100%">
+    <tr>
+        <td width="15%" align="center" valign="top"><!-- left Column -->
+
+            <div>
+                Messages
+            </div>
+            <br />
+
+            <div style=" border:1px solid #74ff3e;" id="users_with_messages">
+                <?php
+                $temp = null;
+
+                if(isset($usersWithMessagesData) && count($usersWithMessagesData)) :
+                    foreach($usersWithMessagesData as $index => $usersWithMessages):
+                        if ($temp != $usersWithMessages['user_message_id'] ):
+                            echo "<div id='user_message'><p><img src='".$usersWithMessages['photo_location'].'mini/'.$usersWithMessages['photo_name']."'><a href='#' id='".$index."'>".$usersWithMessages['user_given_name']."</a>&nbsp;&nbsp;&nbsp;<br />  ".chunk_split($usersWithMessages['user_message_content'],100,'...')."<br/>&nbsp;<center'>Message count (". $usersWithMessages['message_count'].")</center></p></div>";
+                        endif;
+                    endforeach;
+                endif;
+                ?>
+            </div>
+            <!-- left Column -->
+        </td>
+        <td width="60%" valign="top"><!-- Middle Column -->
+
+            <!-- Middle Column -->
+            <br />
+            <div id="messagelistcontainer" style="padding:5px;">
+                <?php
+                //echo $this->partial('message/message/messageslist.phtml', array('userMessagesData' => $usersWithMessagesData));
+                ?>
+            </div>
+            <div id="messageareacontainer" style="padding:10px;display:none;">
+                <?php
+                //echo $this->partial('message/message/messagearea.phtml', array('key' => 'value'));
+                ?>
+            </div>
+            <br />
+
+        </td>
+        <td width="25%" valign="top">
+
+            <br />
+            <!-- Right Column -->
+
+            <!-- Right Column -->
+        </td>
+    </tr>
+</table>
+
+

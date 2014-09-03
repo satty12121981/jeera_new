@@ -1,0 +1,77 @@
+<?php
+$this->headTitle($title);
+$this->HeadScript()->appendFile($this->basePath().'/public/js/admin_activity_view.js','text/javascript');
+?>
+<section id="secondary_bar">
+    <div class="breadcrumbs_container">
+        <article class="breadcrumbs"><a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a><div class="breadcrumb_divider"></div>  <a href="<?php echo $this->url('jadmin/admin-activity') ?>">List Activity</a><div class="breadcrumb_divider"></div><a class="current" href="javascript:void(0);">View Activity</a></article>
+    </div>
+</section>
+<section id="main" class="column">
+    <article class="module width_full">
+        <header><h3><?php echo $this->escapeHtml($title); ?></h3></header>
+        <div class="module_content">
+            <fieldset>
+                <label>Activity Details :</label>				 
+				<span class="field_values">
+				  <p>Title:  <?php echo $view_activity->group_activity_title;?>	</p>			  
+				  <p>Activity Content :<?php echo $view_activity->group_activity_content;?></p>
+				  <p>Galexy : <?php echo $view_activity->parent_group_title; ?> </p>
+				  <p>Planet : <?php echo $view_activity->group_title; ?> </p>
+				  <p>Owner : <?php echo $view_activity->user_given_name; ?> </p>
+				  <p>Location : <?php echo $view_activity->group_activity_location; ?> </p>
+				  <p>Added Time : <?php echo $view_activity->group_activity_added_timestamp; ?> </p>
+				  <p>Start Time : <?php echo $view_activity->group_activity_start_timestamp; ?> </p>
+				  <p>Activity Type: <?php echo $view_activity->group_activity_type; ?> </p>
+				  <?php 	
+						switch($view_activity->group_activity_status){
+							case 1:
+							$status = 'Active';
+							break;
+							case 2:
+							$status = 'Blocked';
+							break;
+							case 3:
+							$status = 'Removed';
+							break;
+							default:
+							$status = 'Active';	
+						}
+						 ?>
+				<p>Activity Status: <?php echo $status; ?> </p>						
+			   </span>
+            </fieldset>             
+            <fieldset> 
+                <label>Activity tags :</label>
+				<span class="field_values">
+					<a href="<?php echo   $this->url('jadmin/admin-activity-tags-view',array("id"=>$view_activity->group_activity_id))  ?>">Manage Tags</a>
+				<ul>
+				 <?php foreach($activitytags as $tags){	?>
+					<li><?php echo $tags->tag_title; ?></li>
+				 <?php } ?>
+				 </ul>
+				 </span>
+            </fieldset>
+			 <fieldset> 
+                <label>Activity members :</label>
+				<span class="field_values">
+					
+				<ul id="members_list">
+				 <?php foreach($activitymembers as $members){	?>
+					<li><?php echo $members->user_first_name." ".$members->user_last_name; ?></li>
+				 <?php } ?>
+				 </ul>
+				 </span>
+				 <input type="hidden" value="<?php echo  $view_activity->group_activity_id ; ?>" id="hid_activity_id" />
+				 <a href="javascript:void(0)" id="loadmore_members">View more >></a>
+            </fieldset>
+            <div class="clear"></div>
+        </div>
+        <footer>
+            <div class="submit_link">
+            </div>
+        </footer>
+	</article><!-- end of post new article -->
+    <div class="clear"></div>
+    <div class="spacer"></div>
+</section>

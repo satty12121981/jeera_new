@@ -1,0 +1,163 @@
+<?php
+$this->headTitle($title);
+$this->HeadScript()->appendFile($this->basePath().'/public/js/admin_activity_list.js','text/javascript');
+?>
+<section id="secondary_bar">
+    <div class="breadcrumbs_container">
+        <article class="breadcrumbs"><a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a><div class="breadcrumb_divider"></div>  <a  class="current" href="<?php echo $this->url('jadmin/admin-planet') ?>"><?php echo $title;?></a></article>
+    </div>
+</section>
+<section id="main" class="column">
+<?php if(count($flashMessages)) : ?>
+    <?php //foreach ($flashMessages[0] as $msg) : ?>
+    <h4 class="<?php echo $flashMessages[0]['type'];?>"><?php echo $flashMessages[0]['message'];?></h4>
+    <?php //endforeach; ?>
+<?php endif; ?>
+    <article class="module width_3_quarter">
+        <header><h3 class="tabs_involved"><?php echo $this->escapeHtml($title); ?></h3> 
+        </header>
+        <div class="tab_container">
+            <div id="tab1" class="tab_content">
+			<div id="search_container">
+				<form action="<?php echo $this->url('jadmin/admin-activity');?>" method="post">
+				<select id="galaxy" name="galaxy" >
+				<?php 
+					foreach($galaxy as $list){ ?>
+						<option value="<?php echo $list->group_seo_title; ?>" <?php echo ($list->group_seo_title == $galaxy_seo)?'selected="selected"':''; ?>><?php echo $list->group_title; ?></option>
+				<?php 	}
+				?>
+				</select>
+				<div id="search_planet_container">
+				<select id="planet" name="planet" >
+				<?php 
+					foreach($planets as $list){ ?>
+						<option value="<?php echo $list->group_seo_title; ?>" <?php echo ($list->group_seo_title == $planet_seo)?'selected="selected"':''; ?>><?php echo $list->group_title; ?></option>
+				<?php 	}
+				?></select>
+				</div>
+				<input type="text" name="activity_search" id="activity_search" value="<?php echo $search; ?>" />
+				<input type="button" value="Search" id="btn_search" /> 
+				</form>
+			</div>
+			<div>Page <?php echo $page  ?> out of <?php echo $total_pages; ?> page</div>
+                <table class="tablesorter" cellspacing="0"> 
+                    <thead> 
+                        <tr>						 
+						<th>Id</th>
+						<th width="165">
+						<?php if($search!=''){ ?>
+						<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=> $page,'sort'=>'title','order'=>($field=='title'&&$order=='ASC')?'desc':'asc','search'=>$search));?>">
+						<?php }else{ ?>
+						<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=> $page,'sort'=>'title','order'=>($field=='title'&&$order=='ASC')?'desc':'asc'));?>">
+						<?php } ?>
+						Activity title</a></th>
+						<th width="165">
+						<?php if($search!=''){ ?>
+						<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=> $page,'sort'=>'content','order'=>($field=='content'&&$order=='ASC')?'desc':'asc','search'=>$search));?>">
+						<?php }else{ ?>
+						<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=> $page,'sort'=>'content','order'=>($field=='content'&&$order=='ASC')?'desc':'asc'));?>">
+						<?php } ?>
+						Activity Content
+						</a></th>
+						<th width="165">
+						<?php if($search!=''){ ?>
+						<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=> $page,'sort'=>'group','order'=>($field=='group'&&$order=='ASC')?'desc':'asc','search'=>$search));?>">
+						<?php }else{ ?>
+						<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=> $page,'sort'=>'group','order'=>($field=='group'&&$order=='ASC')?'desc':'asc'));?>">
+						<?php } ?>
+						Activity Group
+						</a>
+						</th>
+						<th width="165">
+						<?php if($search!=''){ ?>
+						<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=> $page,'sort'=>'user','order'=>($field=='user'&&$order=='ASC')?'desc':'asc','search'=>$search));?>">
+						<?php }else{ ?>
+						<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=> $page,'sort'=>'user','order'=>($field=='user'&&$order=='ASC')?'desc':'asc'));?>">
+						<?php } ?>
+						Activity User
+						</a>
+						</th>
+						<th width="170">
+						<?php if($search!=''){ ?>
+						<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=> $page,'sort'=>'location','order'=>($field=='location'&&$order=='ASC')?'desc':'asc','search'=>$search));?>">
+						<?php }else{ ?>
+						<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=> $page,'sort'=>'location','order'=>($field=='location'&&$order=='ASC')?'desc':'asc'));?>">
+						<?php } ?>
+						Activity Location
+						</a>
+						</th>
+						<th width="165">Status</th>
+						<th width="170">Actions</th>
+						</tr>
+                    </thead> 
+                    <tbody> 
+                        <?php 
+						$i=($page==1)?0:$page-1;
+						$i = $i*20;
+						foreach($all_activity as $rows) : 
+						$i++;
+						$status = 'Active';						
+						if($rows->group_activity_status == 1) {
+						$status = 'Active';
+						}elseif($rows->group_activity_status == 2) {
+						$status = 'Blocked';
+						}elseif($rows->group_activity_status == 3){
+						$status = 'Removed';
+						}else{
+						$status = $status; 
+						}						
+						?>
+                            <tr>                                  
+                                <td><?php echo $i;?></td>
+								<td><?php echo $this->escapeHtml($rows->group_activity_title);?></td>
+								<td><?php echo substr($this->escapeHtml($rows->group_activity_content),0,30); if(strlen($this->escapeHtml($rows->group_activity_content)) >  30) {echo ' ...';}?></td>
+								<td><?php echo $this->escapeHtml($rows->group_title);?></td>
+								<td><?php echo $this->escapeHtml($rows->user_given_name);?></td>
+								<td><?php echo $this->escapeHtml($rows->group_activity_location);?></td>
+								<td id="activity_status_<?php echo $rows->group_activity_id; ?>"><span class="<?php echo "status_".$status; ?>"><?php echo $status;?></span></td>									
+								<td>
+									<a href="<?php echo $this->url('jadmin/admin-activity-view',
+										array('id' => $rows->group_activity_id));?>"><img src="<?php echo $this->basePath(); ?>/public/images/view.png" title="view"></a>
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										<?php if($rows->group_activity_status != 2) { ?>
+									<a href="<?php echo $this->url('jadmin/admin-activity-block',
+										array('id' => $rows->group_activity_id));?>" class="block_activity" id="block_activity_<?php echo $rows->group_activity_id; ?>"><img src="<?php echo $this->basePath(); ?>/public/images/tick.png" title="Block"></a>
+										<?php } else{ ?>
+									<a href="<?php echo $this->url('jadmin/admin-activity-block',
+										array( 'id' => $rows->group_activity_id));?>" class="block_activity" id="block_activity_<?php echo $rows->group_activity_id; ?>"><img src="<?php echo $this->basePath(); ?>/public/images/red-alert.png" title="Unblock"></a>	
+										<?php } ?>
+										&nbsp;&nbsp;&nbsp;&nbsp;
+									<a href="<?php echo $this->url('jadmin/admin-activity-delete',
+										array( 'id' => $rows->group_activity_id));?>"><img src="<?php echo $this->basePath(); ?>/public/images/trash.png" title="Trash"></a>
+								</td>
+							</tr> 
+                        <?php endforeach; ?> 
+						<tr>
+						<td colspan="3">
+							<?php if($search!=''){ ?>
+							<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=>(($page-1)>0)?$page-1:1,'sort'=>$field,'order'=>strtolower($order),'search'=>$search));?>">&laquo; Prev</a>
+							<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=>1,'sort'=>$field,'order'=>strtolower($order),'search'=>$search));?>">Frist</a>
+							<span> <?php echo $page; ?> </span>
+							<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=>$total_pages,'sort'=>$field,'order'=>strtolower($order),'search'=>$search));?>">Last</a>
+							<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=>(($page+1)<=$total_pages)?$page+1:$total_pages,'sort'=>$field,'order'=>strtolower($order),'search'=>$search));?>">Next &raquo;</a>
+							<?php }else{ ?>
+							<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=>(($page-1)>0)?$page-1:1,'sort'=>$field,'order'=>strtolower($order)));?>">&laquo; Prev</a>
+							<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=>1,'sort'=>$field,'order'=>strtolower($order)));?>">Frist</a>
+							<span> <?php echo $page; ?> </span>
+							<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=>$total_pages,'sort'=>$field,'order'=>strtolower($order)));?>">Last</a>
+							<a href="<?php echo $this->url('jadmin/admin-activity',    array('galaxy'=>($galaxy_seo!='')?$galaxy_seo:'All','planet'=>($planet_seo!='')?$planet_seo:'All','page'=>(($page+1)<=$total_pages)?$page+1:$total_pages,'sort'=>$field,'order'=>strtolower($order)));?>">Next &raquo;</a>
+							<?php } ?>
+						</td>
+					</tr>
+                    </tbody> 
+                </table>
+            </div>
+        </div>
+    </article>
+    <div class="clear"></div>
+    <div class="spacer"></div>
+</section>
+
+
+
+

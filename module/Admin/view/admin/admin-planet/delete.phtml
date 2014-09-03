@@ -1,0 +1,25 @@
+<?php
+$title = 'Delete Planet';
+$this->headTitle($title);
+$this->HeadScript()->appendFile($this->basePath().'/public/js/admin_planet_delete.js','text/javascript');
+?>
+<section id="secondary_bar">
+    <div class="breadcrumbs_container">
+        <article class="breadcrumbs"><a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a><div class="breadcrumb_divider"></div>  <a  class="current" href="<?php echo $this->url('jadmin/admin-planet') ?>">Manage Planet</a></article>
+    </div>
+</section>
+<section id="main" class="column">
+	<article class="module width_full">
+		<div id="delete_planet_container">
+		 Group <?php echo $group->group_title; ?> Contains <?php echo $group_member_couunt; ?> members and <?php echo $activity_count ?> activities. All this informations and informations related to these groups are also deleted with group deletion. Are you sure that you want to delete this group?
+		 <form action="<?php echo $this->url('jadmin/admin-planet-delete', array('action' => 'delete', 'id' => $group->group_id));?>" method="post">
+			<input type="button" value="Yes" Name="planet_delete" id="delete_planet" />
+			<input type="submit" value="No" Name="planet_delete" />
+			
+		 </form>
+		</div> 
+		<input type="hidden" value="<?php echo $group->group_id; ?>" name="group_id" id="group_id" />
+	</article>    
+    <div class="clear"></div>
+    <div class="spacer"></div>
+</section>

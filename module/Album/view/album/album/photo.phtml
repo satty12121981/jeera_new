@@ -1,0 +1,359 @@
+ 	<?php if(empty($error)){ ?>
+ <?php if($album_details->album_group_id!=0){ ?>
+	<?php echo $this->groupTopWidget; ?> 
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places" type="text/javascript" charset="utf-8"></script>
+	<?php 
+		$this->HeadLink()->appendStylesheet($this->basePath().'/public/css/album.css'); 
+		$this->HeadScript()->appendFile($this->basePath().'/public/js/album-view.js','text/javascript');  
+		$this->headTitle($album_details->album_title);
+		$this->HeadScript()->appendFile($this->basePath().'/public/js/album_tag.js','text/javascript');
+	?> 
+
+		<script>
+		var album_seo = '<?php echo $album_details->album_seotitle; ?>';		 
+		</script>
+		<div class="profile-tabs2">
+			<div id="tabs">
+				<div class="tabs-outer tabs">
+					<ul> 
+						<li><a href="<?php echo $this->url('groups/planethome',array('group_id'=>$planetdetails->galexy_seo_title,'planet_id'=>$planetdetails->group_seo_title));?>" class="activity_tab">Activities</a></li>
+						<?php if($planetdetails->is_member){ ?> <li><a href="<?php echo $this->url('groups/group-discussion', array('action' => 'subgroupdetailwithdiscussion', 'group_id'=>$planetdetails->galexy_seo_title, 'sub_group_id'=>$planetdetails->group_seo_title)) ?>" class="discuss_tab">Discussion</a></li>
+						<li  class="active"><a href="<?php echo $this->url('groups/group-media', array('action' => 'index', 'group_id'=>$planetdetails->galexy_seo_title, 'sub_group_id'=>$planetdetails->group_seo_title)) ?>" class="media_tab">Media</a></li> <?php } ?>
+						<li><a href="<?php echo $this->url('groups/group-members', array('action' => 'index', 'group_id'=>$planetdetails->galexy_seo_title, 'sub_group_id'=>$planetdetails->group_seo_title)) ?>" class="member_tab">Members</a></li>
+					</ul>
+					<div class="clear"></div>
+				</div>
+				<div id="tabs-3">
+					<div class="album-bredcrumb">
+						<ul>
+							<li><a href="<?php echo $this->url('groups/group-media', array('action' => 'index', 'group_id'=>$planetdetails->galexy_seo_title, 'sub_group_id'=>$planetdetails->group_seo_title)) ?>" class="active">Albums</a></li>
+							<li><a href="<?php echo $this->url('groups/group-album', array('action' => 'view', 'group_id'=>$planetdetails->galexy_seo_title, 'sub_group_id'=>$planetdetails->group_seo_title,'id'=>$album_details->album_seotitle)) ?>" class="active"><?php echo $this->escapeHtml($album_details->album_title); ?></a></li>
+							 <li><a  class="active img-name"><?php echo $album_data['data_content']; ?></a></li>
+						</ul>
+						<div class="clear"></div>
+					</div>		 
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="album-preview-outer">
+			<div class="album-inner">
+				<input type="hidden" name="data_id" id="data_id">
+				<input type="hidden" name="tag_hid_value" id="tag_hid_value">
+				<input type="hidden" name="tag_hid_id" id="tag_hid_id">
+				<div class="preview-img">
+				<?php if($album_data['data_type'] == 'image'){ ?>
+					<div class="album-img" id="album-img-<?php echo $album_data['data_id']; ?>">
+						<img src="<?php echo $this->basePath()?>/public/album/<?php echo $album_details->album_group_id.'/'.$album_details->album_id.'/medium/medium-'.$album_data['data_content'];?>" />
+					</div>
+					<?php if($album_data['tags']){ foreach($album_data['tags'] as $tags){?>
+						 <div class="tagview" id="user_tag_<?php echo $tags['album_tag_id']."_".$tags['album_tag_user_id'];?>" style="top:<?php echo $tags['album_tag_yaxis']."px";?>;left:<?php echo $tags['album_tag_xaxis']."px";?>;" ></div>
+					<?php }} ?>
+				<?php } ?>
+				<?php if($album_data['data_type'] == 'youtube'){ 
+					$url = $album_data['data_content'];
+					preg_match(
+						'/[\\?\\&]v=([^\\?\\&]+)/',
+						$url,
+						$matches
+					);
+					$id = $matches[1];
+					 
+					$width = '700';
+					$height = '390';
+					echo '<object width="' . $width . '" height="' . $height . '"><param name="movie" value="http://www.youtube.com/v/' . $id . '&amp;hl=en_US&amp;fs=1?rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/' . $id . '&amp;hl=en_US&amp;fs=1?rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="' . $width . '" height="' . $height . '"></embed></object>';
+					} ?>
+				<?php if($album_data['current_file']-1 >0){ ?>
+				<div class="arrow-left"><a href="<?php echo $this->url('groups/group-album-data',array('action'=>'file','group_id'=>$planetdetails->galexy_seo_title,'sub_group_id'=>$planetdetails->group_seo_title,'id'=>$album_details->album_seotitle,'count'=>$album_data['current_file']-1));?>"><img src="<?php echo $this->basePath()?>/public/images/arrow-left.png" alt="" /></a></div>
+				<?php } ?>
+				<div class="arrow-right">
+				 
+				<a href="<?php echo $this->url('groups/group-album-data',array('action'=>'file','group_id'=>$planetdetails->galexy_seo_title,'sub_group_id'=>$planetdetails->group_seo_title,'id'=>$album_details->album_seotitle,'count'=>1));?>"><img src="<?php echo $this->basePath()?>/public/images/arrow-right.png" alt="" /></a>
+				 
+				</div>
+				<!-- <div class="full-screen"><a href="#"><img src="images/full-screen-icon.png" alt="" /></a></div> -->
+			</div>
+			<?php if($album_data['data_type'] == 'image'){ ?>
+			<span style="float:right;"><a class="add-tag" id="add-tag-<?php echo $album_data['data_id']; ?>" href="javascript:void(0)">Tag Photo</a>
+			<a class="done-tag" id="done-tag-<?php echo $album_data['data_id']; ?>" href="javascript:void(0)" style="display:none;">Done Taging </a></span>
+			<div id="list-tag-<?php echo $album_data['data_id'];?>">
+				<?php if($album_data['tags']){ foreach($album_data['tags'] as $tags){
+				?>
+					<span class="album_tags" id="list_tag_<?php echo $tags['album_tag_id']."_".$tags['album_tag_user_id'];?>"><a class="view_tag" href="#" id="view_tag_<?php echo$tags['album_tag_id']."|".$tags['album_tag_user_id'];?>"><?php echo $tags['user_given_name']?></a> (<a id="del_tag_<?php echo$tags['album_tag_id']."_".$tags['album_tag_user_id'];?>" class="remove_tag" style="cursor:pointer;">X</a>)</span>
+					
+				<?php }} ?>
+			</div>
+			<?php } ?>
+			<div class="likes-outer">
+				<div class="like-comment-outer">
+					 <div class="likes" id="likes_<?php echo $album_data['data_id']; ?>">
+					<?php if($album_data['file_like']->is_liked){  ?>						 
+							<a href="javascript:void(0)"  class="album-file-unlikes" id="<?php echo $album_data['data_id']; ?>"  ><img src="<?php echo $this->basePath(); ?>/public/images/likes-icon.png" alt="" />  </a>						 
+					<?php }else{ ?>						 
+							<a href="javascript:void(0)" id="<?php echo $album_data['data_id']; ?>" class="album-file-likes"><img src="<?php echo $this->basePath(); ?>/public/images/nolike-icon.png" alt="" />  </a>						
+					<?php } ?>
+					<?php if($album_data['file_like']->likes_counts){echo $album_data['file_like']->likes_counts;} ?>
+					</div>
+					<div class="likes"><a href="javascript:void(0)"><img src="<?php echo $this->basePath(); ?>/public/images/comments-icon.png" alt="" /></a> <?php if($album_data['comment_count']){echo $album_data['comment_count'];} ?> <span><a href="javascript:void(0)">Comment</a></span></div>
+					<div class="clear"></div>
+					 
+				</div>
+				<div class="photo-location"><?php echo $album_details->album_location; ?></div>
+				<div class="clear"></div>
+			</div>
+			<div class="comment-list">
+				<div id="loadmore_<?php echo $album_data['data_id']; ?>"><?php if($album_data['comment_count']>2){ ?><a href="javascript:void(0)" id="<?php echo $album_data['data_id']; ?>" class="loadmore_comments">View <span id="comment_count_<?php echo $album_data['data_id']; ?>"><?php echo $album_data['comment_count']-2 ;?></span> more comments</a> <?php } ?></div>
+				<div id="comment_area<?php echo $album_data['data_id']; ?>">
+				<?php  
+				$arr_comments = array();
+				foreach($album_data['comments'] as $comments){
+					$arr_comments[] = $comments;
+				}
+				$newcommnt =  array_reverse($arr_comments);
+				foreach($newcommnt as $comments){  
+				?>
+				<div class="comment-container" id="comments-outer-<?php echo $comments->comment_id ?>">
+					<div class="comment-profil-img">
+						 <a href="<?php echo $this->url('memberprofile',array('member_profile'=>$comments->user_profile_name)) ?>" class="profile-img-link">
+							<?php if($comments->profile_photo!=''){ ?>
+							<img src="<?php echo $this->basePath(); ?>/public/datagd/profile/<?php echo $comments->user_id ?>/66x66/<?php echo $comments->profile_photo; ?>" alt="" />
+							<?php }else if($comments->user_register_type == 'facebook' && $comments->user_fbid!=''){ ?>
+								<img src="https://graph.facebook.com/<?php echo $comments->user_fbid; ?>/picture?width=66&&height=66" />
+							<?php }else{ ?>
+							<img src="<?php echo $this->basePath(); ?>/public/images/noimg.jpg" alt="" />
+							<?php } ?>
+							</a>
+					</div>
+					<div class="comment-text">
+						<span><a href="<?php echo $this->url('memberprofile',array('member_profile'=>$comments->user_profile_name)) ?>"><?php echo $comments->user_given_name; ?></a></span>
+						 <div id="comment_text_<?php echo $comments->comment_id; ?>"> <?php echo $comments->comment_content; ?></div>
+						
+						<div><?php if($comments->user_id == $this->layout()->identity->user_id ){ ?><a href="javascript:void(0)" id="edit_comment_<?php echo $comments->comment_id; ?>" class="edit_comment">Edit</a><?php } ?><?php if($comments->user_id == $this->layout()->identity->user_id || $album_data['added_user_id']== $this->layout()->identity->user_id ||$is_admin ){ ?><a href="javascript:void(0)" id="delete_comment_<?php echo $comments->comment_id; ?>" class="delete_comment">Delete</a><?php } ?></div>
+						
+					</div>
+					<div class="comment-like">
+						 <div class="activity-comment-like" id="comments_likes<?php echo $comments->comment_id; ?>">
+							<?php if($comments->islike){ ?>
+								 
+								<a href="javascript:void(0)" id="<?php echo $comments->comment_id ?>" class="comments-unlikes"><img src="<?php echo $this->basePath(); ?>/public/images/likes-icon.png" alt="" /></a>
+								 
+							<?php }else{ ?>
+								 
+									<a href="javascript:void(0)" id="<?php echo $comments->comment_id ?>" class="comments-likes"><img src="<?php echo $this->basePath(); ?>/public/images/nolike-icon.png" alt="" /></a>
+								 
+							<?php }?>
+							<?php echo $comments->likes_count; ?>
+							</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<?php } ?>
+				 
+				 </div>
+				<div class="add-comment">
+					<textarea name="comment" id="comment_<?php echo $album_data['data_id']; ?>" class="album-file_comments" placeholder="Comment"></textarea>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div class="clear"></div>
+ 
+<br>
+ 
+  <div class="clear"></div>
+ <?php }else{ ?>
+	<script>
+	var profile_name = '<?php echo $profilename; ?>';
+	var album_seo = '<?php echo $album_details->album_seotitle; ?>'; 
+	</script>  
+
+	<?php $this->HeadLink()->appendStylesheet($this->basePath().'/public/css/album.css');
+	$this->HeadScript()->appendFile($this->basePath().'/public/js/user-album-view.js','text/javascript');
+	$this->HeadScript()->appendFile($this->basePath().'/public/js/user_album_tag.js','text/javascript');
+	?>
+<?php
+	if(!empty($error)){
+		?>
+		<div class="error">
+			<ul>
+			<?php foreach($error as $msg ){  
+				echo "<li>".$msg."</li>";
+				} ?>
+			</ul>
+		</div>
+		<?php 
+	}else{
+ ?>
+<?php echo $this->profileTopWidget; ?>  
+ 
+ 
+ 
+<div class="profile-tabs2">
+	<div id="tabs">
+		<div class="tabs-outer tabs-fullwidth">
+			  <ul>
+					<li><a href="<?php echo $this->url('memberprofile',array('member_profile'=>$profilename));?>" class="connection_tab">Connections</a></li>
+					<li><a href="<?php echo $this->url('memberprofile/planets',array('member_profile'=>$profilename));?>" class="planet_tab">Planets</a></li>
+					<li><a href="<?php echo $this->url('memberprofile/photos',array('member_profile'=>$profilename));?>" class="photo_tab">Photos</a></li>
+			  </ul>
+			  <div class="clear"></div>
+		  </div>
+		 <div id="tabs-3">
+			<div class="album-bredcrumb">
+				<ul>
+					<li><a href="<?php echo $this->url('memberprofile/photos',array('member_profile'=>$profilename));?>" class="active">Albums</a></li>
+					<li><a href="<?php echo $this->url('memberprofile/photos_view', array('action' => 'userAlbumView', 'member_profile'=>$profilename,'album_id'=>$album_details->album_seotitle)) ?>" class="active"><?php if($album_details->album_seotitle == 'user_photos'){ echo "User Photos"; }else{ echo $this->escapeHtml($album_details->album_title);} ?></a></li>
+					 <li><a  class="active img-name"><?php echo $album_data['data_content']; ?></a></li>
+				</ul>
+				<div class="clear"></div>
+			</div>
+			 
+		 </div>
+	</div>
+</div>
+  <div class="clear"></div>
+  <div class="album-preview-outer">
+		<div class="album-inner">
+		<input type="hidden" name="data_id" id="data_id">
+		<input type="hidden" name="tag_hid_value" id="tag_hid_value">
+<input type="hidden" name="tag_hid_id" id="tag_hid_id">
+			<div class="preview-img">
+				<?php if($album_data['data_type'] == 'image'){ ?>
+				<div class="album-img" id="album-img-<?php echo $album_data['data_id']; ?>">
+				<?php if($album_details->album_seotitle == 'user_photos'){ ?>
+					<?php if($album_data['album_group_id']){ ?>
+					<img src="<?php echo $this->basePath()?>/public/album/<?php echo $album_data['album_group_id'].'/'.$album_data['album_id'].'/medium/medium-'.$album_data['data_content'];?>" />
+					<?php }else{ ?>
+						<img src="<?php echo $this->basePath()?>/public/album/profile/<?php echo $album_data['album_user_id'].'/'.$album_data['album_id'].'/medium/medium-'.$album_data['data_content'];?>" />
+					<?php } ?>
+					<?php }else{ ?>
+					<img src="<?php echo $this->basePath()?>/public/album/profile/<?php echo $album_details->album_user_id.'/'.$album_details->album_id.'/medium/medium-'.$album_data['data_content'];?>" />
+					<?php } ?>
+				</div>
+				  <?php if($album_data['tags']){ foreach($album_data['tags'] as $tags){
+									?>
+										<div class="tagview" id="user_tag_<?php echo $tags['album_tag_id']."_".$tags['album_tag_user_id'];?>" style="top:<?php echo $tags['album_tag_yaxis']."px";?>;left:<?php echo $tags['album_tag_xaxis']."px";?>;" ></div>
+									<?php }} ?>
+				<?php } ?>
+				<?php if($album_data['data_type'] == 'youtube'){ 
+					$url = $album_data['data_content'];
+					preg_match(
+						'/[\\?\\&]v=([^\\?\\&]+)/',
+						$url,
+						$matches
+					);
+					$id = $matches[1];
+					 
+					$width = '700';
+					$height = '390';
+					echo '<object width="' . $width . '" height="' . $height . '"><param name="movie" value="http://www.youtube.com/v/' . $id . '&amp;hl=en_US&amp;fs=1?rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/' . $id . '&amp;hl=en_US&amp;fs=1?rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="' . $width . '" height="' . $height . '"></embed></object>';
+					} ?>
+				<?php if($album_data['current_file']-1 >0){ ?>
+				<div class="arrow-left"><a href="<?php echo $this->url('memberprofile/file_view',array('action'=>'userfile','member_profile'=>$profilename,'album_id'=>$album_details->album_seotitle,'num'=>$album_data['current_file']-1));?>"><img src="<?php echo $this->basePath()?>/public/images/arrow-left.png" alt="" /></a></div>
+				<?php } ?>
+				<div class="arrow-right">
+				 
+				<a href="<?php echo $this->url('memberprofile/file_view',array('action'=>'userfile','member_profile'=>$profilename,'album_id'=>$album_details->album_seotitle,'num'=>1));?>"><img src="<?php echo $this->basePath()?>/public/images/arrow-right.png" alt="" /></a>
+				 
+				</div>
+				<!-- <div class="full-screen"><a href="#"><img src="images/full-screen-icon.png" alt="" /></a></div> -->
+			</div>
+			<?php if($album_data['data_type'] == 'image'){ ?>
+			<?php if($myprofile){ ?><span style="float:right;"><a class="add-user-tag" id="add-user-tag-<?php echo $album_data['data_id']; ?>" href="javascript:void(0)">Tag Photo</a>
+			<a class="done-tag" id="done-tag-<?php echo $album_data['data_id']; ?>" href="javascript:void(0)" style="display:none;">Done Taging </a></span><?php } ?>
+			<div id="list-tag-<?php echo $album_data['data_id'];?>">
+				<?php if($album_data['tags']){ foreach($album_data['tags'] as $tags){
+				?>
+					<span class="album_tags" id="list_tag_<?php echo $tags['album_tag_id']."_".$tags['album_tag_user_id'];?>"><a class="view_tag" href="#" id="view_tag_<?php echo$tags['album_tag_id']."|".$tags['album_tag_user_id'];?>"><?php echo $tags['user_given_name']?></a><?php if($myprofile){ ?> (<a id="del_user_tag_<?php echo$tags['album_tag_id']."_".$tags['album_tag_user_id'];?>" href="javascript:void(0)" class="remove_user_tag" style="cursor:pointer;">X</a>) <?php } ?></span>
+					
+				<?php }} ?>
+			</div>
+			<?php } ?>
+			<div class="likes-outer">
+				<div class="like-comment-outer">
+					 <div class="likes" id="likes_<?php echo $album_data['data_id']; ?>">
+					<?php if($album_data['file_like']->is_liked){  ?>						 
+							<a href="javascript:void(0)"  class="album-file-unlikes" id="<?php echo $album_data['data_id']; ?>"  ><img src="<?php echo $this->basePath(); ?>/public/images/likes-icon.png" alt="" />  </a>						 
+					<?php }else{ ?>						 
+							<a href="javascript:void(0)" id="<?php echo $album_data['data_id']; ?>" class="album-file-likes"><img src="<?php echo $this->basePath(); ?>/public/images/nolike-icon.png" alt="" />  </a>						
+					<?php } ?>
+					<?php if($album_data['file_like']->likes_counts){echo $album_data['file_like']->likes_counts;} ?>
+					</div>
+					<div class="likes"><a href="javascript:void(0)"><img src="<?php echo $this->basePath(); ?>/public/images/comments-icon.png" alt="" /></a> <?php if($album_data['comment_count']){echo $album_data['comment_count'];} ?> <span><a href="javascript:void(0)">Comment</a></span></div>
+					<div class="clear"></div>
+					 
+				</div>
+				<div class="photo-location"><?php echo $album_data['album_location']; ?></div>
+				<div class="clear"></div>
+			</div>
+			<div class="comment-list">
+				<div id="loadmore_<?php echo $album_data['data_id']; ?>"><?php if($album_data['comment_count']>2){ ?><a href="javascript:void(0)" id="<?php echo $album_data['data_id']; ?>" class="loadmore_comments">View <span id="comment_count_<?php echo $album_data['data_id']; ?>"><?php echo $album_data['comment_count']-2 ;?></span> more comments</a> <?php } ?></div>
+				<div id="comment_area<?php echo $album_data['data_id']; ?>">
+				<?php  
+				$arr_comments = array();
+				foreach($album_data['comments'] as $comments){
+					$arr_comments[] = $comments;
+				}
+				$newcommnt =  array_reverse($arr_comments);
+				foreach($newcommnt as $comments){  
+				?>
+				<div class="comment-container" id="comments-outer-<?php echo $comments->comment_id ?>">
+					<div class="comment-profil-img">
+						<a href="<?php echo $this->url('memberprofile',array('member_profile'=>$comments->user_profile_name)) ?>" class="profile-img-link">
+							<?php if($comments->profile_photo!=''){ ?>
+							<img src="<?php echo $this->basePath(); ?>/public/datagd/profile/<?php echo $comments->user_id ?>/66x66/<?php echo $comments->profile_photo; ?>" alt="" />
+							<?php }else if($comments->user_register_type == 'facebook' && $comments->user_fbid!=''){ ?>
+								<img src="https://graph.facebook.com/<?php echo $comments->user_fbid; ?>/picture?width=66&&height=66" />
+							<?php }else{ ?>
+							<img src="<?php echo $this->basePath(); ?>/public/images/noimg.jpg" alt="" />
+							<?php } ?>
+							</a>
+					</div>
+					<div class="comment-text">
+						<span><a href="<?php echo $this->url('memberprofile',array('member_profile'=>$comments->user_profile_name)) ?>"><?php echo $comments->user_given_name; ?></a></span>
+						 <div id="comment_text_<?php echo $comments->comment_id; ?>"> <?php echo $comments->comment_content; ?></div>
+						
+						<div><?php if($comments->user_id == $this->layout()->identity->user_id ){ ?><a href="javascript:void(0)" id="edit_comment_<?php echo $comments->comment_id; ?>" class="edit_comment">Edit</a><?php } ?><?php if($comments->user_id == $this->layout()->identity->user_id || $album_data['added_user_id']== $this->layout()->identity->user_id ){ ?><a href="javascript:void(0)" id="delete_comment_<?php echo $comments->comment_id; ?>" class="delete_comment">Delete</a><?php } ?></div>
+						
+					</div>
+					<div class="comment-like">
+						 <div class="activity-comment-like" id="comments_likes<?php echo $comments->comment_id; ?>">
+							<?php if($comments->islike){ ?>
+								 
+								<a href="javascript:void(0)" id="<?php echo $comments->comment_id ?>" class="comments-unlikes"><img src="<?php echo $this->basePath(); ?>/public/images/likes-icon.png" alt="" /></a>
+								 
+							<?php }else{ ?>
+								 
+									<a href="javascript:void(0)" id="<?php echo $comments->comment_id ?>" class="comments-likes"><img src="<?php echo $this->basePath(); ?>/public/images/nolike-icon.png" alt="" /></a>
+								 
+							<?php }?>
+							<?php echo $comments->likes_count; ?>
+							</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<?php } ?>
+				 
+				 </div>
+				<div class="add-comment">
+					<textarea name="comment" id="comment_<?php echo $album_data['data_id']; ?>" class="album-file_comments" placeholder="Comment"></textarea>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div class="clear"></div>
+ 
+<br>
+  <?php } ?>
+  <div class="clear"></div>
+ 
+ <?php } ?>
+  <?php }else{  ?>
+	<ul>
+		<?php foreach($error as $msg){ ?>
+			<li><?php echo $msg; ?></li>
+		<?php } ?>
+	</ul>
+  <?php } ?>

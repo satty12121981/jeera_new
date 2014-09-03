@@ -1,0 +1,6 @@
+<select id="role_list">
+	<option value="">Select one role</option>
+	<?php foreach($roles as $row){ ?>
+		<option value="<?php echo $row->group_roles_id; ?>"><?php echo $row->group_roles_name; ?></option>
+	<?php } ?>
+</select>

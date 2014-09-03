@@ -1,0 +1,46 @@
+
+<?php if(!empty($error)){ ?>
+	<ul>
+	<?php foreach($error as $er){ ?>
+		<li><?php echo $er; ?> </li>
+	<?php } ?>
+	</ul>
+<?php }else{ ?>
+
+	<?php 
+	$i=0;?>
+	<ul> 
+	<?php foreach($friends as $user){ $i++; ?>
+	<li id="<?php echo $user->user_id; ?>" class="friends_list">
+		<div class="msg-list-outer" id="msg-list-outer<?php echo $user->user_id; ?>">
+					<div class="msg-user-info">
+						<div class="messager-img">
+						<a href="javascript:void(0)" id="<?php echo $user->user_id; ?>" class="listMessage">
+						<?php if($user->profile_photo!=''){ ?>
+						<img src="<?php echo $this->basePath(); ?>/public/datagd/profile/<?php echo $user->user_id ?>/66x66/<?php echo $user->profile_photo; ?>" alt="" />
+						<?php }else if($user->user_register_type == 'facebook' && $user->user_fbid!=''){ ?>
+							<img src="https://graph.facebook.com/<?php echo $user->user_fbid; ?>/picture?width=66&&height=66" />
+						<?php }else{ ?>
+						<img src="<?php echo $this->basePath(); ?>/public/images/noimg.jpg" alt="" />
+						<?php } ?>
+						</a>
+						</div>
+						<div class="messager-name"><?php echo $user->user_given_name ; ?></div>
+						<div class="delete-msg">							 
+							<span class="unread"></span>
+							<div class="msg-date">
+								<a href="javascript:void(0)" id="<?php echo $user->user_id; ?>" class="listMessage">
+							<?php //echo date("d/m/Y",strtotime($messages->user_message_added_timestamp)); ?>
+							</a>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					 
+					
+				</div>
+				</li>
+	<?php } ?>
+	 </ul>
+	<?php if($i==0){ echo "No more friends found under this"; } ?>
+<?php } ?>

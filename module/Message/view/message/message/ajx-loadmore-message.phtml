@@ -1,0 +1,53 @@
+<?php if(!empty($error)){ ?>
+	<ul>
+	<?php foreach($error as $er){ ?>
+		<li><?php echo $er; ?> </li>
+	<?php } ?>
+	</ul>
+<?php }else{ ?>
+	  
+	<?php
+	$i= 0;
+	foreach($userMessagesData as $messages){ $i++;?>
+		<div class="message-container<?php if($i%2==0){ echo " msg-alternate";} ?>"  id="message-container_<?php echo $messages['message']['user_message_id']; ?>">
+			<div class="message-image">
+			<div class="message_select" >
+			<input class="mesg_chk" type="checkbox" id="<?php echo $messages['message']['user_message_id']; ?>" value="<?php echo $messages['message']['user_message_id']; ?>" name="message_id[]" />
+            <label for="<?php echo $messages['message']['user_message_id']; ?>"><span></span></label></div>
+				 <a href="<?php echo $this->url('memberprofile',array('member_profile'=>$messages['message']['user_profile_name'])) ?>" class="profile-img-link">
+				<?php if($messages['message']['profile_photo']!=''){ ?>
+				<img src="<?php echo $this->basePath(); ?>/public/datagd/profile/<?php echo $messages['message']['user_id'] ?>/66x66/<?php echo $messages['message']['profile_photo']; ?>" alt="" />
+				<?php }else if($messages['message']['user_register_type'] == 'facebook' && $messages['message']['user_fbid']!=''){ ?>
+					<img src="https://graph.facebook.com/<?php echo $messages['message']['user_fbid']; ?>/picture?width=66&&height=66" />
+				<?php }else{ ?>
+				<img src="<?php echo $this->basePath(); ?>/public/images/noimg.jpg" alt="" />
+				<?php } ?>
+				</a>
+			</div>
+			<div class="main-msg">
+				<div class="msgr-name">
+					<a href="<?php echo $this->url('memberprofile',array('member_profile'=>$messages['message']['user_profile_name'])) ?>" class="profile-img-link"><?php echo $messages['message']['user_given_name']; ?></a>
+					<span><?php echo $messages['message']['user_message_added_timestamp']; ?></span>
+					<div class="clear"></div>
+				</div>
+				<div class="msg-text">
+					 <?php echo $messages['message']['user_message_content']; ?> 	
+					 <?php foreach($messages['message_attachments'] as $attachments){
+						if($attachments['attachment_type']=='image'){
+					 ?>
+					 <img src="<?php echo $this->basePath()."/public/datagd/message/".$attachments['attachment_element']; ?>" width="250px"/>
+					<?php }else{
+					?>	
+					<a href="<?php echo $this->basePath()."/public/datagd/message/".$attachments['attachment_element']; ?>"><?php echo $attachments['attachment_element']; ?></a>
+					 <?php } } ?>
+				</div>
+				
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		 
+	<?php } ?>
+	 
+	 
+<?php } ?>

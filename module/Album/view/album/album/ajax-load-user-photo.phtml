@@ -1,0 +1,56 @@
+ 
+<?php if(empty($error)){ ?> 
+ 
+<?php if(count($album_data) > 0) {  
+$n = 0;
+foreach ($album_data as $album) : 
+$n++;
+?>
+  <div class="list-albums" id="list-albums_<?php echo $album->data_id;?>">  
+  <?php if($album->data_type == 'image'){ ?>
+  <div class="album_image">
+ 
+ <a href="<?php echo $this->url('memberprofile/user_photo_view',array('action'=>'userPhotoFile','member_profile'=>$profilename,'num'=>$n));?>">
+		<?php if($album->album_group_id==0){ ?>
+		<img src="<?php echo $this->basePath()?>/public/album/profile/<?php echo $album->album_user_id.'/'.$album->album_id.'/'.$album->data_content;?>" />
+		<?php }else{ ?>
+		<img src="<?php echo $this->basePath()?>/public/album/<?php echo $album->album_group_id.'/'.$album->album_id.'/'.$album->data_content;?>" />
+		<?php } ?>
+		</a>
+	</div>
+	
+	<?php } else{ if($album->data_type == 'youtube'){
+
+		$url = $album->data_content;
+		$fetch=explode("v=", $url);
+		$videoid=$fetch[1]; 
+	
+	?>
+	<div class="album_video">
+	  <a href="<?php echo $this->url('memberprofile/user_photo_view',array('action'=>'userPhotoFile','member_profile'=>$profilename,'num'=>$n));?>">
+		<img src="http://img.youtube.com/vi/<?php echo $videoid;?>/0.jpg?>" height="100" width="276" />
+	</a>
+	</div>
+	<div class="youtube-data"></div>
+	<?php }} ?>
+  <br>
+     
+  </div>
+<?php endforeach;  }else{
+?>
+<div class="clear"></div>
+<div class="no-data">Sorry!!! no more contents in this album</data>
+<script>scrollend = 1;</script>
+<?php
+} ?>
+ 
+<br>
+  <?php }else{  ?>
+	<ul>
+		<?php foreach($error as $msg){ ?>
+			<li><?php echo $msg; ?></li>
+		<?php } ?>
+	</ul>
+  <?php } ?>
+  <div class="clear"></div>
+   

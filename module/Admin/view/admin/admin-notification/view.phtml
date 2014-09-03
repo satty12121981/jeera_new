@@ -1,0 +1,71 @@
+<?php
+$this->headTitle($title);
+$status = 'Enabled';
+if($view_notification_type->notification_type_status == 0) {
+   $status = 'Disabled';
+  }elseif($view_notification_type->notification_type_status == 1) {
+   $status = 'Enabled';
+  }
+   else{
+   $status = $status; 
+  }
+?>
+
+<section id="secondary_bar">
+
+    <div class="breadcrumbs_container">
+        <article class="breadcrumbs"><a href="<?php echo $this->url('admin') ?>">Admin Dashboard </a><div class="breadcrumb_divider"></div>  <a href="<?php echo $this->url('admin/admin-notification') ?>">Notification Types</a><div class="breadcrumb_divider"></div><a class="current" href="javascript:void(0);">View Notification Type</a></article>
+    </div>
+</section><!-- end of secondary bar -->
+<section id="main" class="column">
+
+
+    <article class="module width_full">
+        <header><h3><?php echo $this->escapeHtml($title); ?></h3></header>
+
+        <div class="module_content">
+            <fieldset>
+                <label>Notification Id :</label>
+				<span class="field_values">
+                  <?php echo $view_notification_type->notification_type_id;?>
+				  </span>
+            </fieldset>
+            <fieldset>
+                <label>Notification Title :</label>
+				<span class="field_values">
+               <?php echo $view_notification_type->notification_type_title;?>
+			   </span>
+            </fieldset>
+             <fieldset>
+                <label>	Notification Description :</label>
+				<span class="field_values">
+              <?php echo $view_notification_type->notification_type_discription;?>
+			  </span>
+            </fieldset>
+            <fieldset> <!-- to make two field float next to one another, adjust values accordingly -->
+                <label>Notification Status :</label>
+				<span class="field_values">
+             <span class="<?php echo "status_".$status; ?>"><?php echo $status;?></span>
+			  </span>
+            </fieldset>
+
+            <div class="clear"></div>
+        </div>
+        <footer>
+            <div class="submit_link">
+					<a href="<?php echo $this->url('admin/admin-notification',
+										array('action'=>'edit', 'id' => $view_notification_type->notification_type_id));?>"><input type="button" value="Edit" class="alt_btn"></a>
+					<a href="<?php echo $this->url('admin/admin-notification') ?>"><input type="button" value="Back"></a>
+			</div>
+        </footer>
+
+
+
+    </article><!-- end of post new article -->
+
+
+    <div class="clear"></div>
+    <div class="spacer"></div>
+
+
+</section>

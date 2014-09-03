@@ -1,0 +1,348 @@
+<?php
+$title = 'View Planet';
+$this->headTitle($title);
+ $this->HeadScript()->appendFile($this->basePath().'/public/js/admin_planet_edit.js','text/javascript');
+?> 
+<?php $this->HeadScript()->appendFile($this->basePath().'/public/js/jquery-ui.js','text/javascript'); ?> 
+<?php  $this->HeadLink()->appendStylesheet($this->basePath().'/public/css/jquery-ui.css'); ?>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places" type="text/javascript" charset="utf-8"></script>
+<section id="secondary_bar">
+    <div class="breadcrumbs_container">
+        <article class="breadcrumbs"><a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a><div class="breadcrumb_divider"></div>  <a href="<?php echo $this->url('jadmin/admin-planet') ?>">Manage Planet</a><div class="breadcrumb_divider"></div><a href="<?php echo $this->url('jadmin/admin-planet-view', array('id' => $group->group_id));
+                        ?>">View Planet</a></article>
+    </div>
+</section>
+<section id="main" class="column">
+<?php if(isset($flashMessages) && count($flashMessages)) : ?>
+<ul class="session">
+    <?php foreach ($flashMessages as $msg) : ?>
+    <li><?php echo $msg; ?></li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+<?php if(isset($error) && count($error)) : ?>
+<ul class="error">
+    <?php foreach ($error as $errormsg) : ?>
+    <li><?php echo $errormsg; ?></li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+<?php if(isset($success) && count($success)) : ?>
+<ul class="success">
+    <?php foreach ($success as $successmsg) : ?>
+    <li><?php echo $successmsg; ?></li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+    <article class="module width_full">
+        <header><h3><?php echo $this->escapeHtml($title); ?></h3>
+		<ul class="tabs">
+				<li class="second"><a href="<?php echo $this->url('jadmin/admin-planet', array('action' => 'index')); ?>">List All</a></li>
+                <li class="second"><a href="<?php echo $this->url('jadmin/admin-planet-add'); ?>">Add New Planet</a></li>
+				<li><a href="<?php echo $this->url('jadmin/admin-planet-approvelist', array('action'=>'approvelist'));?>">Approve Planets added by Users</a></li>
+        </ul>
+		</header>		 
+		<div class="module_content">
+			<h2><?php echo $group->group_title; ?></h2>
+		</div>
+		<div class="module_content">
+			<p><?php echo $group->group_discription; ?></p>
+		</div>
+		<div class="module_content">
+			<p>Created by:<?php echo $groupOwner->user_first_name.' '.$groupOwner->user_last_name; ?> &nbsp; Created date:<?php echo $group->group_added_timestamp; ?> &nbsp; &nbsp; Galexy:<?php echo $group->galexy_title; ?>&nbsp; Staus: <?php echo ($group->group_status)?  "Active":  "Deactive"; ?> &nbsp; Members:<a href=""><?php echo  $group->member_count ?></a>&nbsp; Activities:<a href=""><?php echo  $activity_count; ?></a></p>
+		</div>
+		<fieldset>
+                <label>Group Image</label>
+				<?php
+				if(isset($group->data_content) && !empty($group->data_content)){
+				?>
+				<img src="<?php echo $this->basePath()?>/public/album/<?php echo $group->group_id."/main/".$group->data_content;?>" height="125px" width="125px">
+				<?php
+				} ?>
+        </fieldset>
+		<fieldset>
+                <label>Group Location</label>
+				<div class="module_content">
+					<p>Country:<?php echo $group->country_title; ?></p>
+					<p>City:<?php echo $group->city; ?></p>
+					<p>Location:<?php echo $group->group_location; ?></p>
+					<p>Web adress:<?php echo $group->group_web_address; ?></p>
+					<div id="map-canvas" ></div>
+				</div>
+        </fieldset>
+		<fieldset>
+                <label>Group Tags</label>
+				<div class="module_content">
+					<a href="<?php echo $this->url('jadmin/admin-palnet-tags-view',    array('action'=>'view', 'id' => $group->group_id));?>">Add tags </a>
+					<ul>
+					 <?php foreach($grouptags as $tags){ 
+						echo '<li>'.$tags->tag_title.'</li>';
+					  } ?>
+					</ul>
+				</div>
+        </fieldset>
+		<fieldset>
+                <label>Group Questionnaire </label>
+				<div class="module_content">
+					<a href="<?php echo $this->url('jadmin/admin-planet-add-questions',array('id' => $group->group_id)); ?>">Add Questions</a>
+					<ul>
+					 <?php 
+					 $i = 0;
+					 foreach($questionaire as $questions){ $i++;
+						 echo '<p>'.$i.' '.$questions['question'].'</p>';
+						 if($questions['answer_type'] == 'radio' ||$questions['answer_type'] == 'checkbox'){
+							$j=0;
+							echo '<ul>';
+							foreach($questions['options'] as $options ){$j++;
+								echo '<li>'.$j.' '. $options->option.'</li>';
+							}
+							echo '</ul>';
+						 }
+						echo' <a href="'.$this->url('jadmin/admin-planet-edit-questions', array('id' => $questions['questionnaire_id'])).'"><img src="'.$this->basePath().'/public/images/edit.png" title="Edit"></a>';
+						if($questions['question_status']){
+							echo' <a href="'.$this->url('jadmin/admin-planet-status-questions', array('id' => $questions['questionnaire_id'])).'"><img src="'.$this->basePath().'/public/images/tick.png" title="status"></a>';
+						}else{
+							echo' <a href="'.$this->url('jadmin/admin-planet-status-questions', array('id' => $questions['questionnaire_id'])).'"><img src="'.$this->basePath().'/public/images/remove-icon.png" title="status"></a>';
+						}
+						echo' <a href="'.$this->url('jadmin/admin-planet-delete-questions', array('id' => $questions['questionnaire_id'])).'"><img src="'.$this->basePath().'/public/images/trash.png" title="delete" onclick="return confirm(\'Are you sure you need to remove this question?\')"></a>';
+					  } ?>
+					</ul>
+				</div>
+        </fieldset>
+    </article>
+    <div class="clear"></div>
+    <div class="spacer"></div>
+</section>
+ <style>
+	#map-canvas, #activity_map{
+  height: 400px;
+
+  border: 1px solid #999;
+  -moz-box-shadow:    0px 0px 5px #ccc;
+  -webkit-box-shadow: 0px 0px 5px #ccc;
+  box-shadow:         0px 0px 5px #ccc;
+}
+ </style>
+ <script>
+		<?php  if($group->y2m_group_location_lat!=''){ ?>
+		var current_lat = <?php echo $group->y2m_group_location_lat; ?>;
+		<?php } else{ ?>
+		var current_lat = 25.271139000000000000;	
+		<?php  } ?>
+		<?php  if($group->y2m_group_location_lng!=''){ ?>
+		var current_lng = <?php echo $group->y2m_group_location_lng; ?>;
+		<?php } else{ ?>
+		var current_lng =55.307485000000040000;
+		<?php  } ?>
+	 
+var geocoder;
+var map;
+var marker;
+var mapselected = 'map1';
+// initialise the google maps objects, and add listeners
+function gmaps_init(){
+
+  // center of the universe
+  var latlng = new google.maps.LatLng(current_lat,current_lng);
+
+  var options = {
+    zoom: 7,
+    center: latlng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+
+  };
+
+  // create our map object
+  if(mapselected=='map1')
+  map = new google.maps.Map(document.getElementById("map-canvas"), options);
+  else
+   map = new google.maps.Map(document.getElementById("activity_map"), options);
+
+  // the geocoder object allows us to do latlng lookup based on address
+  geocoder = new google.maps.Geocoder();
+	 
+
+  // the marker shows us the position of the latest address
+  marker = new google.maps.Marker({
+    map: map,
+	icon: "<?php echo $this->basepath(); ?>/public/images/rocket2-icon.png",
+    draggable: true
+  });
+marker.setPosition(latlng);
+  // event triggered when marker is dragged and dropped
+  google.maps.event.addListener(marker, 'dragend', function() {
+    geocode_lookup( 'latLng', marker.getPosition() );
+  });
+
+  // event triggered when map is clicked
+  google.maps.event.addListener(map, 'click', function(event) {
+    marker.setPosition(event.latLng)
+    geocode_lookup( 'latLng', event.latLng  );
+  });
+
+  $('#gmaps-error').hide();
+}
+
+// move the marker to a new position, and center the map on it
+function update_map( geometry ) {
+  map.fitBounds( geometry.viewport )
+  marker.setPosition( geometry.location )
+}
+
+// fill in the UI elements with new position data
+function update_ui( address, latLng ) {
+if(mapselected=='map1'){
+  $('#group_location').autocomplete("close");
+  $('#group_location').val(address);
+  }else{
+   $('#address').autocomplete("close");
+  $('#address').val(address);
+  }
+  geo_latitude = latLng.lat(); 
+  geo_longitude = latLng.lng(); 
+  $('#y2m_group_location_lat').html(latLng.lat());
+  $('#y2m_group_location_lng').html(latLng.lng());
+}
+
+// Query the Google geocode object
+//
+// type: 'address' for search by address
+//       'latLng'  for search by latLng (reverse lookup)
+//
+// value: search query
+//
+// update: should we update the map (center map and position marker)?
+function geocode_lookup( type, value, update ) {
+  // default value: update = false
+  update = typeof update !== 'undefined' ? update : false;
+
+  request = {};
+  request[type] = value;
+
+  geocoder.geocode(request, function(results, status) {
+    $('#gmaps-error').html('');
+    $('#gmaps-error').hide();
+    if (status == google.maps.GeocoderStatus.OK) {
+      // Google geocoding has succeeded!
+      if (results[0]) {
+        // Always update the UI elements with new location data
+        update_ui( results[0].formatted_address,
+                   results[0].geometry.location )
+
+        // Only update the map (position marker and center map) if requested
+        if( update ) { update_map( results[0].geometry ) }
+      } else {
+        // Geocoder status ok but no results!?
+        $('#gmaps-error').html("Sorry, something went wrong. Try again!");
+        $('#gmaps-error').show();
+      }
+    } else {
+      // Google Geocoding has failed. Two common reasons:
+      //   * Address not recognised (e.g. search for 'zxxzcxczxcx')
+      //   * Location doesn't map to address (e.g. click in middle of Atlantic)
+
+      if( type == 'address' ) {
+        // User has typed in an address which we can't geocode to a location
+        $('#gmaps-error').html("Sorry! We couldn't find " + value + ". Try a different search term, or click the map." );
+        $('#gmaps-error').show();
+      } else {
+        // User has clicked or dragged marker to somewhere that Google can't do a reverse lookup for
+        // In this case we display a warning, clear the address box, but fill in LatLng
+        $('#gmaps-error').html("Woah... that's pretty remote! You're going to have to manually enter a place name." );
+        $('#gmaps-error').show();
+        update_ui('', value)
+      }
+    };
+  });
+};
+
+// initialise the jqueryUI autocomplete element
+function autocomplete_init() {
+	if(mapselected=='map1'){
+  $("#group_location").autocomplete({
+
+    // source is the list of input options shown in the autocomplete dropdown.
+    // see documentation: http://jqueryui.com/demos/autocomplete/
+    source: function(request,response) {
+
+      // the geocode method takes an address or LatLng to search for
+      // and a callback function which should process the results into
+      // a format accepted by jqueryUI autocomplete
+      geocoder.geocode( {'address': request.term }, function(results, status) {
+        response($.map(results, function(item) {
+          return {
+            label: item.formatted_address, // appears in dropdown box
+            value: item.formatted_address, // inserted into input element when selected
+            geocode: item                  // all geocode data: used in select callback event
+          }
+        }));
+      })
+    },
+
+    // event triggered when drop-down option selected
+    select: function(event,ui){
+      update_ui(  ui.item.value, ui.item.geocode.geometry.location )
+      update_map( ui.item.geocode.geometry )
+    }
+  });
+  }else{
+	  $("#address").autocomplete({
+
+    // source is the list of input options shown in the autocomplete dropdown.
+    // see documentation: http://jqueryui.com/demos/autocomplete/
+    source: function(request,response) {
+
+      // the geocode method takes an address or LatLng to search for
+      // and a callback function which should process the results into
+      // a format accepted by jqueryUI autocomplete
+      geocoder.geocode( {'address': request.term }, function(results, status) {
+        response($.map(results, function(item) {
+          return {
+            label: item.formatted_address, // appears in dropdown box
+            value: item.formatted_address, // inserted into input element when selected
+            geocode: item                  // all geocode data: used in select callback event
+          }
+        }));
+      })
+    },
+
+    // event triggered when drop-down option selected
+    select: function(event,ui){
+      update_ui(  ui.item.value, ui.item.geocode.geometry.location )
+      update_map( ui.item.geocode.geometry )
+    }
+  });
+  }
+if(mapselected=='map1'){
+  // triggered when user presses a key in the address box
+  $("#group_location").bind('keydown', function(event) {
+    if(event.keyCode == 13) {
+      geocode_lookup( 'address', $('#group_location').val(), true );
+
+      // ensures dropdown disappears when enter is pressed
+      $('#group_location').autocomplete("disable")
+    } else {
+      // re-enable if previously disabled above
+      $('#group_location').autocomplete("enable")
+    }
+  });
+  }
+  else{
+	$("#address").bind('keydown', function(event) {
+    if(event.keyCode == 13) {
+      geocode_lookup( 'address', $('#address').val(), true );
+
+      // ensures dropdown disappears when enter is pressed
+      $('#address').autocomplete("disable")
+    } else {
+      // re-enable if previously disabled above
+      $('#address').autocomplete("enable")
+    }
+  });
+  }
+}; // autocomplete_init
+ mapselected = 'map1';
+					gmaps_init();
+				 
+		
+</script>

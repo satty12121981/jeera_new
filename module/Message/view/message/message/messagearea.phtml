@@ -1,0 +1,68 @@
+<style>
+    #messagearea {
+        border: 1px solid white;
+        height: 400px;
+        width: 550px;
+        margin: 0px;
+        left:10px;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+<script>
+    $('#messagearea').perfectScrollbar();
+    var imgstr = "";
+    var json = "";
+    var globstr = '<?php if (isset($Username)) echo $Username; ?>';
+    var settings = {
+        url: "/message/messagesend/" + globstr,
+        method: "POST",
+       // allowedTypes:"jpg,png,gif,doc,pdf,zip,txt",
+        fileName: "messagefile",
+        data: $("textarea#user_message_content").serialize(), // serializes the form's elements.
+        multiple: true,
+        showDone:false,
+        showDelete:true,
+        showCancel:true,
+        showAbort:false,
+        onSuccess:function(files,data,xhr)
+        {
+            $("#status").show();
+            $("#status").html('');
+            json = $.parseJSON(data);
+            //alert(json);
+            if (json.image && files) imgstr = imgstr + "<img src='" + json.image + "' />&nbsp;" + json.file_name +"<br /><br />";
+            $("#status").html( $("#status").html() + imgstr );
+        },
+        deleteCallback: function (data, pd) {
+
+            var json = $.parseJSON(data);
+            $.post("/message/messageimagedelete/" + globstr, {op: "delete",main_image: json.main_image,image: json.image,id: json.image_id},
+                function (resp,textStatus, jqXHR) {
+                    //Show Message
+                    if ( json.file_type == 'doc')
+                        var tempstr = "<img src='file.png' />&nbsp;" + json.file_name;
+                    else if(json.file_name == 'image')
+                        var tempstr = "<img src='" + json.image + "' />&nbsp;" + json.file_name;
+                    imgstr = imgstr.replace(tempstr ,'');
+                    $("#status").html( imgstr );
+                });
+
+            pd.statusbar.hide(); //You choice.
+        },
+        onError: function(files,status,errMsg)
+        {
+            alert(files);
+            // $("#status").html($("#status").html()+"<br/>Error for: "+JSON.stringify(files));
+        }
+    }
+
+    $("#deleteFileUpload").uploadFile(settings);
+</script>
+<div id="messageAction" style="display: none;"><input id="resetDeleteCheckbox" type="button" Value="cancel" /><input id="messageDelete" type="button" Value="delete" /> </div>
+<div class="ps-container" id="messagearea">
+    <textarea id="user_message_content" name="user_message_content" rows="3" cols="50" style="width: 447px; height: 72px;"></textarea>
+    <div id="status"></div>
+    <div id="deleteFileUpload">Add Images</div><br />
+    <input type="submit" id="messagesend" name="messagesend" value="send message" />
+</div>

@@ -1,0 +1,228 @@
+.album-main{
+     
+}
+.list-albums{
+    border: 0px solid #CCCCCC;
+    float: left;
+    height: 175px;
+    text-align: center;
+    width: 256px;
+	position:relative;
+}
+.list-albums img{width:256px !important; max-height:175px; min-height:175px;}
+.album-title{
+	background-color: #383838;
+    color: #FFFFFF;
+    font-weight: bold;
+    height: auto;
+    opacity: 0.51;
+    position: absolute;
+    text-align: center;
+    width: 256px;
+}
+.album-actions{ 
+	margin-top: -23px;
+    position: absolute;
+    text-align: right;
+    width: 276px;
+}
+.no-data{
+	color: #fd6b5e; font:14px Arial, Helvetica, sans-serif;
+    height: 30px;
+    margin: 20px;
+    padding: 20px;
+    text-align: center; clear:both;
+}
+.album_video{
+
+position:relative;
+}
+.youtube-data{
+ background: url("../images/youtube.png") no-repeat scroll 0 0 transparent;
+ height: 64px;
+    width: 64px;
+	position:absolute; 
+	margin:-32px 0 0 -32px;
+	top:50%;
+	left:50%;
+	
+}
+.user-action{
+ background: url(../images/album_edit.png) no-repeat center #474d4d;
+ height: 24px;
+    width: 24px;
+	position:absolute;
+	right:0;
+    top:0;
+	cursor:pointer;
+	z-index:9999;
+	
+}
+.toggle_actions{
+ background: none repeat scroll 0 0 #585d5d;
+    font:11px Arial, Helvetica, sans-serif;
+    height: 45px;
+    position: absolute;
+    right:0;
+    text-align: right; padding:5px 10px;
+    top:24px;
+    width:90px;
+	display:none;
+	z-index:9999;
+}
+.toggle_actions ul{margin:0; padding:0; list-style-type:none;}
+.toggle_actions ul li{display:block; padding:4px 0;}
+.toggle_actions ul li a{color:#fff; text-decoration:none;}
+
+.album-img  img{
+    width:630px;
+
+}
+.album-img{position:relative;}
+#dragandrophandler
+{
+border:2px dashed #0B85A1;
+width:790px;
+color:#92AAB0;
+text-align:center;
+padding:55px;
+margin-bottom:10px; font:25px "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+.progressBar {
+    width: 200px;
+    height: 22px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    display:inline-block;
+    margin:0px 10px 5px 5px;
+    vertical-align:top; font:12px Arial, Helvetica, sans-serif;
+}
+ 
+.progressBar div {
+    height: 100%;
+    color: #fff;
+    text-align: right;
+    line-height: 22px; /* same as #progressBar height if we want text middle aligned */
+    width: 0;
+    background-color: #0ba1b5; border-radius: 3px;
+}
+.statusbar
+{
+    border-top:1px solid #A9CCD1;
+    min-height:25px;
+    width:700px;
+    padding:10px 10px 0px 10px;
+    vertical-align:top;
+}
+.statusbar:nth-child(odd){
+    background:#EBEFF0;
+}
+.filename
+{
+display:inline-block;
+vertical-align:top;
+width:250px; font:12px Arial, Helvetica, sans-serif;
+}
+.filesize
+{
+display:inline-block;
+vertical-align:top;
+color:#30693D;
+width:100px;
+margin-left:10px;
+margin-right:5px; font:12px Arial, Helvetica, sans-serif;
+}
+.abort{
+    background-color:#A8352F;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    border-radius:4px;display:inline-block;
+    color:#fff;
+    font-family:arial;font-size:13px;font-weight:normal;
+    padding:4px 15px;
+    cursor:pointer;
+    vertical-align:top
+    }
+	#video_urlbox{
+	display:none;
+	}
+	#video_urlbox_more{
+	display:none;
+	}
+	.album_edit_view{
+	display:none;
+	}
+.tag-img
+{
+  cursor: crosshair;
+}
+.tagview
+{
+  border:solid 3px #fff;
+  width:100px;
+  height:100px;
+  position:absolute;
+  display:none;
+}
+#tagit
+{
+  position:absolute;
+  top:0;left:0;
+  width:250px;
+}
+#tagit .box
+{
+  border:solid 3px #fff;
+  width:100px;
+  height:100px;
+
+}
+
+#tagit .name
+{
+  background-color:#fff; 
+  padding:3px;
+  margin-left: -65px;
+  width: 226px;
+}
+#tagit div.text
+{
+  margin-bottom:5px;
+}
+#tagit input[type=text]
+{
+  margin-bottom:1px;
+}
+#tagit #tagname
+{
+    width: 212px;
+}
+#taglist
+{
+  background-color:#012D4A;
+  width:300px;
+  min-height:200px;
+  height:auto !important;
+  height:200px;
+  float:left;
+  padding:10px;
+  margin-left:20px;
+  color:#BFC6D0;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+
+}
+#taglist ol { padding:0 20px;float:left;cursor:pointer}
+#taglist ol a { color:#BFC6D0;font-size:11px;}
+#taglist ol a:hover { text-decoration:underline }
+.tagtitle
+{
+  font-size:14px;
+  text-align:center;
+  width:100%;
+  float:left;
+}
+input.blue-butn{border:none; cursor:pointer;}
+	

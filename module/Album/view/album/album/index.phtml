@@ -1,0 +1,127 @@
+<?php echo $this->groupTopWidget; ?> 
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places" type="text/javascript" charset="utf-8"></script>
+<?php 
+  $this->HeadScript()->appendFile($this->basePath().'/public/js/album.js','text/javascript');  
+$title = 'Planet albums';
+$this->headTitle($title);
+$this->HeadLink()->appendStylesheet($this->basePath().'/public/css/album.css');
+?>
+<?php if(empty($error)){ ?>
+ <div class="profile-tabs2">
+	<div id="tabs">
+		<div class="tabs-outer tabs">
+			<ul> 
+				<li><a href="<?php echo $this->url('groups/planethome',array('group_id'=>$planetdetails->galexy_seo_title,'planet_id'=>$planetdetails->group_seo_title));?>" class="activity_tab">Activities</a></li>
+				<?php if($planetdetails->is_member){ ?> <li><a href="<?php echo $this->url('groups/group-discussion', array('action' => 'subgroupdetailwithdiscussion', 'group_id'=>$planetdetails->galexy_seo_title, 'sub_group_id'=>$planetdetails->group_seo_title)) ?>" class="discuss_tab">Discussion</a></li>
+				<li class="active"><a href="<?php echo $this->url('groups/group-media', array('action' => 'index', 'group_id'=>$planetdetails->galexy_seo_title, 'sub_group_id'=>$planetdetails->group_seo_title)) ?>" class="media_tab">Media</a></li> <?php } ?>
+				<li><a href="<?php echo $this->url('groups/group-members', array('action' => 'index', 'group_id'=>$planetdetails->galexy_seo_title, 'sub_group_id'=>$planetdetails->group_seo_title)) ?>" class="member_tab">Members</a></li>
+			</ul>
+            <div class="clear"></div>
+         </div>
+		<div id="tabs-3">
+			<div class="album-bredcrumb">
+				<ul>
+					<li><a href="<?php echo $this->url('groups/group-media', array('action' => 'index', 'group_id'=>$planetdetails->galexy_seo_title, 'sub_group_id'=>$planetdetails->group_seo_title)) ?>" class="active">Albums</a></li>
+					
+				</ul>
+				<div class="add-activity-butn"><?php if($planetdetails->is_member){ ?><a href="javascript:void(0);" class="blue-butn" id="add_albums">Add new album</a><?php }  ?></div>
+				<div class="clear"></div>
+				<div id="add_albums_container" style="display:none" class="new-album-container">
+				<?php $form = $this->form;
+				$form->setAttribute('action', $this->url('album/album-create', array('action' => 'add')));
+				$form->prepare();
+				echo $this->form()->openTag($form);	
+
+				echo '<div class="album-field">';			
+				echo $this->formRow($form->get('album_title'));
+				echo '</div><div class="album-error"></div>';
+				echo '<div class="album-field">';
+				echo $this->formRow($form->get('album_location'));
+				echo '</div>';
+				?>
+				<br>
+				<div id="dragandrophandler">Drag & Drop Files Here</div>
+				<br>
+				<div id="status1"></div>
+
+				<a  id="add_planet_video" href="javascript:void(0)" class="blue-butn">Add Video Url (youtube)</a>
+				<br>
+				<div id="video_urlbox">
+				<div id='TextBoxesGroup'>
+				<div id="images_uploaded"></div>
+	
+				<div id="TextBoxDiv1"><div class="album-field">
+				<label><span>URL&nbsp;#1 :</span> </label><input type='text' name='planet_video[]' id='textbox1' class="video_textbox" >
+				<div class="clear"></div>
+				 </div> 
+			</div>
+		</div>
+		<br>
+		<a href="javascript:void(0)" id="addButton" class="blue-butn">Add More</a>
+		<a href="javascript:void(0)" id="removeButton" class="grey-butn" >Remove</a>
+		 
+</div>
+<br>
+<div id="album_butn_contr">
+<?php
+echo $this->formSubmit($form->get('submit')); ?>
+</div>
+<?php 
+echo $this->form()->closeTag(); ?>
+
+				</div>
+				<div class="clear"></div>
+			</div>
+			 
+			<?php if(count($albums) > 0) {  foreach ($albums as $album) :  ?>  
+			<div class="planet-list-outer">
+				<div class="planet-tab-img"><a href="<?php echo $this->url('groups/group-album', array('action' => 'view', 'group_id'=>$planetdetails->galexy_seo_title, 'sub_group_id'=>$planetdetails->group_seo_title,'id'=>$album['album_seotitle'])) ?>">
+					<?php if($album['data_id'] == ""){ ?>
+						<img src="<?php echo $this->basePath()?>/public/album/no_preview.jpg" height="100" width="276" />
+					<?php }else{
+							if($album['album_cover_photo_id'] != 0){ ?>
+							<img src="<?php echo $this->basePath()?>/public/album/<?php echo $album['album_group_id'].'/'.$album['album_id'].'/'.$album['cover_photo'];?>" height="100" width="276" />
+							<?php }else{if($album['data_type'] == "image"){ ?>
+							<img src="<?php echo $this->basePath()?>/public/album/<?php echo $album['album_group_id'].'/'.$album['album_id'].'/'.$album['data_content'];?>" height="100" width="276" />
+							<?php }else{
+								$url = $album['data_content'];
+								$fetch=explode("v=", $url);
+								$videoid=$fetch[1]; 
+								?>
+								<img src="http://img.youtube.com/vi/<?php echo $videoid;?>/0.jpg?>" height="100" width="276" />
+								<div class="youtube-data"></div>
+								<?php						
+								}
+							}
+					}?>
+				</a></div>
+				<div class="planet-details">
+					<div class="photo-icon"></div>
+					<div class="planet-head">
+						<h3><a href="<?php echo $this->url('groups/group-album', array('action' => 'view', 'group_id'=>$planetdetails->galexy_seo_title, 'sub_group_id'=>$planetdetails->group_seo_title,'id'=>$album['album_seotitle'])) ?>"><?php echo $this->escapeHtml($album['album_title']);?></a></h3>
+						<div class="members-amnt"><?php echo date("d/m/Y",strtotime($this->escapeHtml($album['album_added_timestamp']))); ?></div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<?php endforeach; }else{
+			?>
+			<div class="clear"></div>
+			<div class="no-data">Sorry!!! no album found in this planet</data>
+			<?php
+			}
+			?>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+ </div>
+  </div>
+  <?php }else{  ?>
+	<ul>
+		<?php foreach($error as $msg){ ?>
+			<li><?php echo $msg; ?></li>
+		<?php } ?>
+	</ul>
+  <?php } ?>
+ 

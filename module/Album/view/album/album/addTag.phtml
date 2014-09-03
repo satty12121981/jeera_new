@@ -1,0 +1,109 @@
+<?php
+ //$this->view->headScript()->appendFile($basePath .'/public/js/jquery.anythingslider.js');
+ $this->HeadScript()->appendFile('http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js','text/javascript');
+ $this->HeadScript()->appendFile($this->basePath().'/public/js/jquery.anythingslider.js','text/javascript');
+ $this->HeadScript()->appendFile($this->basePath().'/public/js/jquery-ui.min.js','text/javascript');
+ $this->HeadScript()->appendFile($this->basePath().'/public/js/album_tag.js','text/javascript');
+ 
+ $this->HeadLink()->appendStylesheet($this->basePath().'/public/css/album.css'); 
+ $this->HeadLink()->appendStylesheet($this->basePath().'/public/css/anythingslider.css'); 
+ $this->HeadLink()->appendStylesheet($this->basePath().'/public/css/jquery-ui.min.css'); 
+
+
+// module/Album/view/album/album/single.phtml:
+
+$this->headTitle($album_title);
+?>
+<style>
+	#slider { width: 700px; height: 750px; }
+	</style>
+
+	<!-- AnythingSlider initialization -->
+	<script>
+		// DOM Ready
+		$(function(){ 
+			$('#slider').anythingSlider({
+			buildStartStop      : false,
+			buildNavigation     : false,
+			startPanel          : <?php echo $panel_num;?>,
+			});
+		});
+		var siteurl = "<?php echo $this->basePath(); ?>" ;
+	</script>
+	
+<h1><?php echo $this->escapeHtml($album_title); ?></h1>
+<p>
+    <a href="<?php echo $this->url('album/album-view', array('action'=>'view','id'=>$album_id));?>">Back to Album</a>
+</p>
+<div class="album-main">
+<input type="text" name="planet_id" value="<?php echo $album_group_id;?>"  id="planet_id">
+<input type="text" name="data_id" id="data_id">
+<input type="text" name="tag_hid_value" id="tag_hid_value">
+<input type="text" name="tag_hid_id" id="tag_hid_id">
+
+<ul id="slider">
+
+<?php   foreach ($album_data as $album) : ?>
+
+  <?php if($album->data_type == 'image'){ ?>
+  <li>
+	  <div class="content-main">
+	  <div class="album-img" id="album-img-<?php echo $album->data_id; ?>"><img src="<?php echo $this->basePath()?>/public/album/<?php echo $album->album_group_id.'/medium/medium-'.$album->data_content;?>" alt=""  /></div>	  
+	  <div class="content-actions">
+	  <span class="content-like">12<a href="javascript:void(0)" class="like-activity" id="">
+								<img src="<?php echo $this->basePath()?>/public/images/activity-like.png" title="Like photo" /></a></span>
+	  &nbsp;<span class="content-comment">
+								9<a href="javascript:void(0)" class="comment-activity" id="">
+								<img src="<?php echo $this->basePath()?>/public/images/activity-comment.png" title="Comment photo" /></a></span>
+								<span style="float:right;"><a class="add-tag" id="add-tag-<?php echo $album->data_id; ?>" href="javascript:void(0)">Tag Photo</a>
+								<a class="done-tag" id="done-tag-<?php echo $album->data_id; ?>" href="javascript:void(0)" style="display:none;">Done Taging </a>
+								</span>
+								<br>
+								
+								<div class="comment-area">
+								<div class="figureset"> <div class="figureset-figure">   <a style="display: block;" title="Vito"  class="mem-photo-background-60 square-50  memberinfo-widget" href="#"> <img alt="Vito" src="<?php echo $this->basePath()?>/public/datagd/profile/no-image.jpg"  height="35" width="35"> </a>  </div> <div class="figureset-description">    <h5><a title="Vito"  class="memberinfo-widget" href="#">User Name</a></h5>  <p>Comment text comes here</p> <p class="small muted">  <span style="display: none;" class="likeWidget"><a class="j-like-list tooltip-widget">0</a> ·</span>   datetime   </p> </div>  </div>
+								<div class="figureset"> <div class="figureset-figure">   <a style="display: block;" title="Vito"  class="mem-photo-background-60 square-50  memberinfo-widget" href="#"> <img alt="Vito" src="<?php echo $this->basePath()?>/public/datagd/profile/no-image.jpg"  height="35" width="35"> </a>  </div> <div class="figureset-description">    <h5><a title="Vito"  class="memberinfo-widget" href="#">User Name</a></h5>  <p>Comment text comes here</p> <p class="small muted">  <span style="display: none;" class="likeWidget"><a class="j-like-list tooltip-widget">0</a> ·</span>   datetime   </p> </div>  </div>
+								</div>
+	  
+	  </div>
+	  </div>
+  </li>
+ 
+	<?php } else{ if($album->data_type == 'youtube'){
+	$url = $album->data_content;
+	preg_match(
+        '/[\\?\\&]v=([^\\?\\&]+)/',
+        $url,
+        $matches
+    );
+	$id = $matches[1];
+	 
+	$width = '700';
+	$height = '390';
+	?>
+	
+	<li><div class="content-main">
+	<span ><?php echo '<object width="' . $width . '" height="' . $height . '"><param name="movie" value="http://www.youtube.com/v/' . $id . '&amp;hl=en_US&amp;fs=1?rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/' . $id . '&amp;hl=en_US&amp;fs=1?rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="' . $width . '" height="' . $height . '"></embed></object>';?></span>
+	<div class="content-actions">
+	  <span class="content-like">12<a href="javascript:void(0)" class="like-activity" id="">
+								<img src="<?php echo $this->basePath()?>/public/images/activity-like.png" title="Like photo" /></a></span>
+	  &nbsp;<span class="content-comment">
+								9<a href="javascript:void(0)" class="comment-activity" id="">
+								<img src="<?php echo $this->basePath()?>/public/images/activity-comment.png" title="Comment photo" /></a></span>
+									<div class="comment-area">
+								<div class="figureset"> <div class="figureset-figure">   <a style="display: block;" title="Vito"  class="mem-photo-background-60 square-50  memberinfo-widget" href="#"> <img alt="Vito" src="<?php echo $this->basePath()?>/public/datagd/profile/no-image.jpg"  height="35" width="35"> </a>  </div> <div class="figureset-description">    <h5><a title="Vito"  class="memberinfo-widget" href="#">User Name</a></h5>  <p>Comment text comes here</p> <p class="small muted">  <span style="display: none;" class="likeWidget"><a class="j-like-list tooltip-widget">0</a> ·</span>   datetime   </p> </div>  </div>
+								<div class="figureset"> <div class="figureset-figure">   <a style="display: block;" title="Vito"  class="mem-photo-background-60 square-50  memberinfo-widget" href="#"> <img alt="Vito" src="<?php echo $this->basePath()?>/public/datagd/profile/no-image.jpg"  height="35" width="35"> </a>  </div> <div class="figureset-description">    <h5><a title="Vito"  class="memberinfo-widget" href="#">User Name</a></h5>  <p>Comment text comes here</p> <p class="small muted">  <span style="display: none;" class="likeWidget"><a class="j-like-list tooltip-widget">0</a> ·</span>   datetime   </p> </div>  </div>
+								</div>
+	  
+	  </div>
+	</div>
+	</li>
+	
+	<?php }} ?>
+
+
+<?php endforeach;?>
+
+	</ul>
+</div>
+<br>

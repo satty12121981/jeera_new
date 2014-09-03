@@ -1,0 +1,66 @@
+<?php $i = 0;
+ foreach($search_result['users']  as $users){ $i++; ?>
+	<div class="members_area">		
+				<div class="selected_members-img">			
+					<a href="<?php echo $this->url('memberprofile',array('member_profile'=>$users->user_profile_name)) ?>" class="profile-img-link">
+						<?php if($users->profile_photo!=''){ ?>
+						<img src="<?php echo $this->basePath(); ?>/public/datagd/profile/<?php echo $users->user_id ?>/66x66/<?php echo $users->profile_photo; ?>" alt="" />
+						<?php }else if($users->user_register_type == 'facebook' && $users->user_fbid!=''){ ?>
+							<img src="https://graph.facebook.com/<?php echo $users->user_fbid; ?>/picture?width=66&&height=66" />
+						<?php }else{ ?>
+						<img src="<?php echo $this->basePath(); ?>/public/images/noimg.jpg" alt="" />
+						<?php } ?>
+					</a>			
+				</div>			
+				<div class="selected_members-name"><a href="<?php echo $this->url('memberprofile',array('member_profile'=>$users->user_profile_name)) ?>"><?php echo $users->user_given_name ; ?></a></div>	
+				<div class="options">
+					<div class="connection-status" id="connection-status_<?php echo $users->user_id; ?>"><?php if($user_id!=$users->user_id ){ 
+			if($users->is_friend){ ?>		
+			<span>Friends</span>
+			<?php }else if($users->is_requested){
+				echo "Already requested ";
+			}else if($users->get_request){
+				echo '<a href="javascript:void(0)" class="blue-butn accept_friend" id="accept_friend_'.$users->user_id.'">Accept request</a>';
+			}else{
+				echo '<a href="javascript:void(0)" class="blue-butn add_friend" id="add_friend_'.$users->user_id.'">Add friend</a>';
+			}
+			 
+		} ?></div>
+				</div>
+				<div class="clear"></div>
+			</div>
+<?php } ?>
+<?php foreach($search_result['groups']  as $groups){ $i++; ?>
+		<div class="members_area">		
+				<?php if($groups->parent_seo_title!=''){ ?>
+				<div class="selected_members-img">			
+				<a href="<?php echo $this->url('groups/planethome',array('group_id'=>$groups->parent_seo_title,'planet_id'=>$groups->group_seo_title));?>">
+					<?php if($groups->data_content!=''){ ?>
+						<img src="<?php echo $this->basePath(); ?>/public/images/noimg.jpg" alt="" class="settings-profile-img" />
+						<?php }else{ ?>
+						<img src="<?php echo $this->basePath(); ?>/public/images/noimg.jpg" alt="" class="settings-profile-img" />
+						<?php } ?>
+				</a>
+				</div>
+				<?php }else{ ?>	
+					<div class="galaxy-img">
+					<a href="<?php echo $this->url('groups/planet',array('group_id'=>$groups->group_seo_title));?>">
+					<?php if($groups->group_photo_photo!=''){ ?>
+						<img src="<?php echo $this->basePath() ?>/public/datagd/galexy/<?php echo $groups->group_photo_photo; ?>" alt="" />
+					<?php }else{ ?>
+						<img src="<?php echo $this->basePath() ?>/public/images/galaxy-noimg.jpg" alt="" />
+					<?php } ?>
+					</a>
+					</div>
+				<?php } ?>
+				<div class="selected_members-name"><a href="<?php echo $this->url('groups/planethome',array('group_id'=>$groups->parent_seo_title,'planet_id'=>$groups->group_seo_title));?>"><?php echo $groups->group_title ; ?></a></div>
+<div class="clear"></div>				
+			</div>
+<?php } ?>
+<?php if($i>0){ ?>
+<div class="btn-loadmore">
+	<a href="javascript:void(0)" class="search_loadmore" id="search_loadmore">Load more</a>
+</div>
+<?php }else{ ?>
+	<div class="msg_nomore">No more results</div>
+<?php } ?>

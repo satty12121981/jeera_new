@@ -1,0 +1,216 @@
+ <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places" type="text/javascript" charset="utf-8"></script>
+<?php $this->HeadScript()->appendFile($this->basePath().'/public/js/profile-album.js','text/javascript'); ?>
+ <?php  $this->HeadLink()->appendStylesheet($this->basePath().'/public/css/jquery.Jcrop.css'); ?>
+ <?php $this->HeadScript()->appendFile($this->basePath().'/public/js/jquery.Jcrop.js','text/javascript'); ?>
+<script>
+var profile_name = '<?php echo $profilename; ?>';
+var album_seo = '<?php echo $album_details->album_seotitle; ?>';
+</script>  
+<?php $this->HeadLink()->appendStylesheet($this->basePath().'/public/css/album.css');?>
+<?php
+	if(!empty($error)){
+		?>
+		<div class="error">
+			<ul>
+			<?php foreach($error as $msg ){  
+				echo "<li>".$msg."</li>";
+				} ?>
+			</ul>
+		</div>
+		<?php 
+	}else{
+ ?>
+ <?php echo $this->profileTopWidget; ?>  
+<div class="profile-tabs2">
+	<div id="tabs">
+		<div class="tabs-outer tabs-fullwidth">
+			<ul>
+				<li><a href="<?php echo $this->url('memberprofile',array('member_profile'=>$profilename));?>" class="connection_tab">Connections</a></li>
+				<li><a href="<?php echo $this->url('memberprofile/planets',array('member_profile'=>$profilename));?>" class="planet_tab">Planets</a></li>
+				<li><a href="<?php echo $this->url('memberprofile/photos',array('member_profile'=>$profilename));?>" class="photo_tab">Photos</a></li>
+			</ul>
+            <div class="clear"></div>
+         </div>
+		 <div id="tabs-3">
+			<div class="album-bredcrumb">
+				<ul>
+					<li><a href="<?php echo $this->url('memberprofile/photos',array('member_profile'=>$profilename));?>" class="active">Albums</a></li>
+					<li><a href="<?php echo $this->url('memberprofile/photos_view', array('action' => 'userAlbumView', 'member_profile'=>$profilename,'album_id'=>$album_details->album_seotitle)) ?>" class="active"><?php echo $this->escapeHtml($album_details->album_title); ?></a></li> 
+					 
+				</ul>
+				<div class="clear"></div>
+			</div>
+			 
+			<div class="add-activity-butn"><?php if($myprofile){ ?>
+			<a href="javascript:void(0);" class="blue-butn" id="album_add_more">Add photo/video</a>
+			<?php  if($logged_id == $album_details->album_user_id){ ?>	
+			<a href="javascript:void(0);" id="album_edit" class="blue-butn"><b>Edit</b></a>  
+			<a href="<?php echo $this->url('album/album-delete', array('action'=>'delete','album_id'=>$album_details->album_seotitle));?>" id="delete_albums" class="blue-butn"><b>Delete Album</b></a>
+			<?php } ?>
+			<?php }  ?></div>
+			 
+		 </div>
+	</div>
+</div>
+  <div class="clear"></div>
+ 
+<div id="add_albums_container" style="display:none" class="new-album-container">
+<form id="frmalbum_add_more" action="<?php echo $this->url('album/ajaxAddmore', array('action' => 'ajaxAddmore', 'album_id'=>$album_details->album_seotitle)) ?>" method="post">
+ <div id="dragandrophandler">Drag & Drop Files Here</div>
+ <input type="hidden" value="<?php echo $album_details->album_group_id;?>" id="album_group_id" name="album_group_id">
+ <input type="hidden" value="<?php echo $album_details->album_id;?>" id="album_id" name="album_id">
+ <br>
+<div id="status1"></div>
+
+<a href="javascript:void(0)" id="add_more_video" class="blue-butn">Add Video Url (youtube)</a>
+<br>
+<div id="video_urlbox_more">
+<div id='TextBoxesGroup'>
+	
+	
+<div id="TextBoxDiv1">
+	<div class="album-field">
+		<label><span>URL&nbsp;#1 :</span></label> <input type='text' name='planet_video[]' id='textbox1' class="video_textbox" />
+	</div>
+</div>
+</div>
+<br>
+<a href="javascript:void(0)" id="addButton" class="blue-butn">Add More</a>
+		<a href="javascript:void(0)" id="removeButton" class="grey-butn" >Remove</a>
+</div>
+<br><br>
+<input type='button' class="blue-butn" value='Submit' id='submit_more'>
+ 
+</form>
+</div>
+<div   id="album_edit_view"  style="display:none;" class="new-album-container">
+<form id="edit_album" action="<?php echo $this->url('album/ajaxEditAlbum', array('action' => 'ajaxEditAlbum', 'album_id'=>$album_details->album_seotitle)) ?>" method="post">
+<div class="album-field">
+<label for="album_title">Album Title</label>
+<input type="text" value="<?php echo $album_details->album_title;?>" id="album_title" name="album_title" />
+</div>
+<div class="album-field">
+<label for="album_location">Album Location</label>
+<input type="text" value="<?php echo $album_details->album_location;?>" id="album_location" name="album_location">
+</div>
+<br><br>  
+<input type='button' value='Submit' id='submit_update' class="blue-butn">
+ 
+</form>
+  <div class="clear"></div>
+</div>
+ 
+<br>
+ 
+<div class="album-main">
+<div id="album-items">
+<?php if(count($album_data) > 0) {  
+$n = 0;
+foreach ($album_data as $album) : 
+$n++;
+?>
+  <div class="list-albums" id="list-albums_<?php echo $album['data_id'];?>">
+ 
+ <div class="user-action" id="toggle_section_<?php echo $album['data_id'];?>" title="Edit Image">
+
+ </div>
+ <div class="toggle_actions" id="toggle_actions_<?php echo $album['data_id'];?>" style="display:none;">
+ <ul>
+ <?php if($album['data_type'] == 'image'){ ?>
+ <?php  if($logged_id == $album_details->album_user_id){ ?>	
+ <li><a class="album_cvr" id="album_cvr_<?php echo $album['data_id'].'|'.$album['album_id'];?>" href="<?php echo $this->url('album/ajaxAlbumCover', array('action' => 'ajaxAlbumCover','album_id'=>$album_details->album_seotitle,'id'=>$album['data_id'])) ?>">Make Cover Photo</a></li>
+ <?php } ?>
+ <?php } ?>
+  <?php   if($logged_id == $album['added_user_id']){ ?>
+<li><a class="album_pic_del" id="album_pic_del_<?php echo $album['data_id'];?>" href="<?php echo $this->url('album/ajaxDeleteUserData', array('action' => 'ajaxDeleteUserData','album_id'=>$album_details->album_seotitle,'id'=>$album['data_id'])) ?>">Delete This  <?php if($album['data_type'] == 'image'){ echo "Photo"; } else{ echo "Video";}?></a></li>
+ <?php } ?>
+   <?php   if($logged_id == $album['added_user_id']){ ?>
+<li><a class="album_pic_profile" id="album_pic_profile_<?php echo $album['data_id'];?>" href="javascript:void(0)">Make this as your profile picture</a></li>
+ <?php } ?>
+</ul>
+ </div>
+   
+  <?php if($album['data_type'] == 'image'){ ?>
+  <div class="album_image">
+ 
+  <a href="<?php echo $this->url('memberprofile/file_view',array('action'=>'userfile','member_profile'=>$profilename,'album_id'=>$album_details->album_seotitle,'num'=>$n));?>">
+		<img id="album_image_<?php echo $album['data_id']; ?>" src="<?php echo $this->basePath()?>/public/album/profile/<?php echo $album['album_user_id'].'/'.$album['album_id'].'/'.$album['data_content'];?>" />
+	</a>
+	</div>
+	
+	<?php } else{ if($album['data_type'] == 'youtube'){
+
+		$url = $album['data_content'];
+		$fetch=explode("v=", $url);
+		$videoid=$fetch[1]; 
+	
+	?>
+	<div class="album_video">
+	  <a href="<?php echo $this->url('memberprofile/file_view',array('action'=>'userfile','member_profile'=>$profilename,'album_id'=>$album_details->album_seotitle,'num'=>$n));?>">
+		<img src="http://img.youtube.com/vi/<?php echo $videoid;?>/0.jpg?>"   />
+	</a>
+	</div>
+	<div class="youtube-data"></div>
+	<?php }} ?>
+  <br>
+    <div class="album-actions" style="display:none;">
+        <a href="<?php echo $this->url('album',
+            array('action'=>'edit', 'album_id' => $album['album_id']));?>">Edit</a>
+        <a href="<?php echo $this->url('album',
+            array('action'=>'delete', 'album_id' => $album['album_id']));?>">Delete</a>
+  </div>
+  </div>
+<?php endforeach; ?></div> <?php }else{
+?>
+<div class="clear"></div>
+<div class="no-data">Sorry!!! no content in this album</data>
+<?php
+} ?>
+<div class="ajax_loader"></div>
+</div>
+<br>
+  <?php }  ?>
+  <div class="clear"></div>
+ </div>	
+ <div id="popup_box">    <!-- OUR PopupBox DIV-->
+    <h1>This IS A Cool PopUp</h1>
+    <a id="popupBoxClose">Close</a>   
+	<div id="profile_image_crop"></div>
+	<div>
+	<input type="hidden" id="profile_data_id" name="profile_data_id" />
+	<input type="button" id="save_profile_pic" value="Save" /></div>
+</div>
+  <script>
+	 var lastScroll = 0;
+	 
+	 var url = baseurl+'/album/'+album_seo+'/ajaxLoadUserData';
+	 var album_page =1;
+	 var flag = 1;
+	 jQuery(document).ready(function()
+	{
+	 $(window).scroll(function() {  
+		if(!scrollend){
+			var st = $(this).scrollTop();
+			if(st > lastScroll){
+				if ($('body').height()-100 <= ($(window).height() + $(window).scrollTop())) {
+					if(flag){ flag = 0;
+						 $(".ajax_loader").html('<img src="'+baseurl+'/public/images/ajax_loader.gif" />');					 
+						$.ajax({
+						type: "POST",
+						url: url,
+						data: {'page': album_page},
+						success: function(data) {
+						$(".ajax_loader").html("");
+							$("#album-items").append(data);
+							album_page= album_page+1;
+							flag = 1;
+						}
+						});
+					}
+				}
+			}
+			lastScroll = st;
+			}
+	});
+});
+  </script>

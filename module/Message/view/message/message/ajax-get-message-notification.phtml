@@ -1,0 +1,22 @@
+<?php if(!empty($messages)){
+	$i = 0;
+	 
+	foreach($messages as $msg){ $i++; ?>
+		<div class="message-notification">
+			<a href="<?php echo $this->url('memberprofile',array('member_profile'=>$msg->user_profile_name)) ?>">
+			<?php  if($msg->profile_photo!=''){ ?>
+		<img src="<?php echo $this->basePath(); ?>/public/datagd/profile/<?php echo $msg->user_id ?>/66x66/<?php echo $msg->profile_photo; ?>" alt="" />
+		<?php }else if($msg->user_register_type == 'facebook' && $msg->user_fbid!=''){ ?>
+		<img src="https://graph.facebook.com/<?php echo $msg->user_fbid; ?>/picture?width=66&&height=66" />
+		<?php }else{ ?>
+		<img src="<?php echo $this->basePath(); ?>/public/images/noimg.jpg" alt="" />
+		<?php } ?>
+			New message from <span><?php echo $msg->user_given_name; ?></span></a>
+		</div>		
+	<?php 	}
+	if($i == 0){
+		echo "No more new messages!";
+	}
+}else{
+	echo "No more new messages!";
+} ?>

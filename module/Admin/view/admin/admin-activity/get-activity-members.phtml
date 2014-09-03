@@ -1,0 +1,19 @@
+<?php 
+	if(isset($error)&&!empty($error)){
+		echo "<ul>";
+		foreach($error as $list){
+			echo "<li>".$list."</li>";
+		}
+		echo "</ul>";
+	}else{
+?>		
+	<?php 
+		$i=0;
+	foreach($members as $members_list){$i++;
+		?>
+		<li><?php echo $members_list->user_first_name." ".$members_list->user_last_name; ?></li>
+	<?php 
+	}
+	 
+		?>
+<?php 	} ?>
