@@ -71,9 +71,9 @@ class AdminTagCategoryController extends AbstractActionController
 			if($sort==''){
 				$sort = 'id';
 			}
-			$total_tags = $this->getTagCategoryTable()->getCountOfAllTags($search);
-			$total_pages = ceil($total_tags/20);
-			$allTagData = $this->getTagCategoryTable()->getAllTagCategoriess(20,$offset,$field,$order,$search);			 
+			//$total_tags = $this->getTagCategoryTable()->getCountOfAllTagCategories($search);
+			//$total_pages = ceil($total_tags/20);
+			//$allTagData = $this->getTagCategoryTable()->getAllTagCategories(20,$offset,$field,$order,$search);			 
 			return array('allTagCategoriesData' => $allTagCategoriesData,'field'=>$sort,'order'=>$order,'search'=>$search,'total_pages'=>$total_pages,'page'=> $page, 'error' => $error, 'success' => $success, 'flashMessages' => $this->flashMessenger()->getMessages());	 	
         }else{			
 			 return $this->redirect()->toRoute('jadmin/login', array('action' => 'login'));		

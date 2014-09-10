@@ -4,6 +4,7 @@ return array(
         'invokables' => array(
             'Admin\Controller\Admin' => 'Admin\Controller\AdminController',
 			'Admin\Controller\AdminTag' => 'Admin\Controller\AdminTagController',
+            'Admin\Controller\AdminTagCategory' => 'Admin\Controller\AdminTagCategoryController',
 			'Admin\Controller\AdminUserTag' => 'Admin\Controller\AdminUserTagController',
 			'Admin\Controller\AdminPlanetTag' => 'Admin\Controller\AdminPlanetTagController',
 			'Admin\Controller\AdminActivityTag' => 'Admin\Controller\AdminActivityTagController',
@@ -14,9 +15,7 @@ return array(
     ),	 
 	'controller_plugins' => array(
         'invokables' => array(
-             
-     'ResizePlugin' => 'Album\Controller\Plugin\ResizePlugin',
-   
+        'ResizePlugin' => 'Album\Controller\Plugin\ResizePlugin',
         ),
     ),
 	 // The following section is new and should be added to your file

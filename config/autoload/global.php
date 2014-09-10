@@ -16,7 +16,7 @@ return array(
         'driver'         => 'Pdo',
         'dsn'            => 'mysql:dbname=y2m_jeera_new;host=localhost',
 		'username'       => 'root',
-        'password'       => '',
+        'password'       => 'chandra',
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
         ),

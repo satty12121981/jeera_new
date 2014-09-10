@@ -8,7 +8,7 @@ $this->headTitle($title);
         <article class="breadcrumbs">
 		<a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a>
 		<div class="breadcrumb_divider"></div>
-		<a href="<?php echo $this->url('jadmin/admin-tags') ?>">Manage Tag Category</a>
+		<a href="<?php echo $this->url('jadmin/admin-tag-categories') ?>">Manage Tag Category</a>
 		<div class="breadcrumb_divider"></div>
 		<a class="current" href="javascript:void(0);">Add Tag Category</a></article>
     </div>
@@ -45,7 +45,7 @@ $this->headTitle($title);
 		</header>
         <?php
         $form = $this->form;
-		$form->setAttribute('action', $this->url('jadmin/admin-tag-categrory-add'));
+		$form->setAttribute('action', $this->url('jadmin/admin-tag-categories-add'));
 		$form->prepare();
 
         echo $this->form()->openTag($form) . PHP_EOL;     
