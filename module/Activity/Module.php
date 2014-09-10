@@ -76,13 +76,12 @@ class Module
                     $table = new GroupsTable($dbAdapter);
                     return $table;
                 },
-				
 				'Groups\Model\UserGroupTable' =>  function($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $table = new UserGroupTable($dbAdapter);
                     return $table;
                 },
-               'Activity\Model\ActivityTable' =>  function($sm) {
+                'Activity\Model\ActivityTable' =>  function($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $table = new ActivityTable($dbAdapter);
                     return $table;

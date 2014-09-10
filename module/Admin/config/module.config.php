@@ -57,7 +57,66 @@ return array(
                             ),
                         ),
                     ),
-					 'admin-tags' => array(
+                    'admin-tag-categories' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route'    => '/tagcategories[/:page][/:sort][/:order][/:search]',
+                            'constraints' => array(
+                                'page' => '[0-9]+',
+                                'sort'     => '[a-zA-Z0-9_-]*',
+                                'order'     => '[a-zA-Z0-9_-]*',
+                                'search' => '[a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Admin\Controller',
+                                'controller' => 'admintagcategory',
+                                'action'     => 'index',
+                            ),
+                        ),
+                    ),
+                    'admin-tag-categories-add' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route'    => '/tagcategories/add',
+                            'constraints' => array(
+
+                            ),
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Admin\Controller',
+                                'controller' => 'admintagcategory',
+                                'action'     => 'add',
+                            ),
+                        ),
+                    ),
+                    'admin-tag-categories-edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route'    => '/tagcategories/edit/[:id]',
+                            'constraints' => array(
+                                'id'=>'[0-9]+'
+                            ),
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Admin\Controller',
+                                'controller' => 'admintagcategory',
+                                'action'     => 'edit',
+                            ),
+                        ),
+                    ),
+                    'admin-tag-categories-delete' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route'    => '/tagcategories/delete/[:id]',
+                            'constraints' => array(
+                                'id'=>'[0-9]+'
+                            ),
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Admin\Controller',
+                                'controller' => 'admintagcategory',
+                                'action'     => 'delete',
+                            ),
+                        ),
+                    ),
+					'admin-tags' => array(
                         'type' => 'segment',
                         'options' => array(
                            	'route'    => '/tags[/:page][/:sort][/:order][/:search]',

@@ -36,6 +36,7 @@ class TagTable extends AbstractTableGateway
     public function saveTag(Tag $tag)
     {
        $data = array(
+            'category_id' => $tag->category_id,
             'tag_title' => $tag->tag_title,
             'tag_added_timestamp'  => $tag->tag_added_timestamp,
 			'tag_added_ip_address'  => $tag->tag_added_ip_address			
@@ -49,7 +50,7 @@ class TagTable extends AbstractTableGateway
             if ($this->getTag($tag_id)) {
                 $this->update($data, array('tag_id' => $tag_id));
             } else {
-                throw new \Exception('Form id does not exist');
+                throw new \Exception('Tag id does not exist');
             }
         }
     }

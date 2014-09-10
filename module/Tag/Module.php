@@ -1,6 +1,7 @@
 <?php
 namespace Tag; 
 use Tag\Model\TagTable;
+use Tag\Model\TagCategoryTable;
 use Tag\Model\UserTagTable;
 use Tag\Model\ActivityTagTable;
 use Zend\Db\ResultSet\ResultSet;			#Uses in Table Tag for Db
@@ -62,7 +63,12 @@ class Module
                     $table = new TagTable($dbAdapter);
                     return $table;
                 },
-				 'Tag\Model\UserTagTable' =>  function($sm) {
+                'Tag\Model\TagCategoryTable' =>  function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new TagCategoryTable($dbAdapter);
+                    return $table;
+                },
+				'Tag\Model\UserTagTable' =>  function($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $table = new UserTagTable($dbAdapter);
                     return $table;

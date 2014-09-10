@@ -1,5 +1,5 @@
 <?php
-$title = 'Add new Tag';
+$title = 'Add new Tag Category';
 $this->headTitle($title);
 ?>
 <section id="secondary_bar">
@@ -8,9 +8,9 @@ $this->headTitle($title);
         <article class="breadcrumbs">
 		<a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a>
 		<div class="breadcrumb_divider"></div>
-		<a href="<?php echo $this->url('jadmin/admin-tags') ?>">Manage Tags</a> 
+		<a href="<?php echo $this->url('jadmin/admin-tags') ?>">Manage Tag Category</a>
 		<div class="breadcrumb_divider"></div>
-		<a class="current" href="javascript:void(0);">Add Tags</a></article>
+		<a class="current" href="javascript:void(0);">Add Tag Category</a></article>
     </div>
 </section><!-- end of secondary bar -->
 <section id="main" class="column">
@@ -45,22 +45,22 @@ $this->headTitle($title);
 		</header>
         <?php
         $form = $this->form;
-		$form->setAttribute('action', $this->url('jadmin/admin-tags-add'));
+		$form->setAttribute('action', $this->url('jadmin/admin-tag-categrory-add'));
 		$form->prepare();
 
         echo $this->form()->openTag($form) . PHP_EOL;     
         
-		echo $this->formHidden($form->get('tag_id')) . PHP_EOL;
+		echo $this->formHidden($form->get('tag_category_id')) . PHP_EOL;
         ?>
         <div class="module_content">
 
             <fieldset>
                 <label>Category*</label>
-                <?php echo $this->formRow($form->get('category_id')) . PHP_EOL; ?>
+                <?php echo $this->formRow($form->get('tag_category_id')) . PHP_EOL; ?>
             </fieldset>
             <fieldset>
                 <label>Name*</label>
-                <?php echo $this->formRow($form->get('tag_title')) . PHP_EOL; ?>
+                <?php echo $this->formRow($form->get('tag_category_title')) . PHP_EOL; ?>
             </fieldset>
 
 

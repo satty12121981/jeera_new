@@ -4,11 +4,11 @@ namespace Tag\Model;
 class Tag
 {  
     public $tag_id;
+    public $category_id;
     public $tag_title;
     public $tag_added_timestamp;
 	public $tag_added_ip_address;
-	 
-	 
+
 	
 /**
      * Used by ResultSet to pass each database row to the entity
@@ -16,8 +16,9 @@ class Tag
     public function exchangeArray($data)
     {
         $this->tag_id     = (isset($data['tag_id'])) ? $data['tag_id'] : null;
+        $this->category_id     = (isset($data['category_id'])) ? $data['category_id'] : null;
         $this->tag_title = (isset($data['tag_title'])) ? $data['tag_title'] : null;
-        $this->tag_added_timestamp  = (isset($data['tag_added_timestamp'])) ? $data['tag_added_timestamp'] : null;
+        $this->tag_added_timestamp  = (isset($data['tag_added_timestamp'])) ? $data['tag_added_timestamp'] : date('Y-m-d H:i:s');
 		$this->tag_added_ip_address  = (isset($data['tag_added_ip_address'])) ? $data['tag_added_ip_address'] : null;
 		 
     }

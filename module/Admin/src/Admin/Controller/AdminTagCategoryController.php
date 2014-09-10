@@ -11,12 +11,13 @@ use Zend\Authentication\Storage\Session as SessionStorage;
 use Tag\Model\Tag;
 use Admin\Form\AdminTagForm;
 use Admin\Form\AdminTagFilter;   
-use Admin\Form\AdminTagEditFilter;   
-class AdminTagController extends AbstractActionController
+use Admin\Form\AdminTagEditFilter;
+
+class AdminTagCategoryController extends AbstractActionController
 {    
-	protected $tagTable;	 
-	protected $userTagTable;
-	protected $groupTagTable;
+	protected $tagTable;
+    protected $userTagTable;
+    protected $groupTagTable;
     protected $tagCategoryTable;
 
     public function indexAction()
@@ -44,13 +45,13 @@ class AdminTagController extends AbstractActionController
 			$field = '';
 			switch($sort){
 				case 'id':
-					$field = 'tag_id';
+					$field = 'tag_category_id';
 				break;
 				case 'title':
-					$field = 'tag_title';
+					$field = 'tag_category_title';
 				break;
 				default:
-					$field = 'tag_id';
+					$field = 'tag_category_id';
 			}
 			if($order == 'desc'){
 				$order = 'DESC';
@@ -61,8 +62,8 @@ class AdminTagController extends AbstractActionController
 			$request = $this->getRequest();
 			if ($request->isPost()) {						 
 				$post = $request->getPost();
-				if(isset($post['tag_search'])&&$post['tag_search']!=''){
-					$search = $post['tag_search'];
+				if(isset($post['tag_category_search'])&&$post['tag_category_search']!=''){
+					$search = $post['tag_category_search'];
 				}
 			}else{
 				$search =  $this->getEvent()->getRouteMatch()->getParam('search');
@@ -70,10 +71,10 @@ class AdminTagController extends AbstractActionController
 			if($sort==''){
 				$sort = 'id';
 			}
-			$total_tags = $this->getTagTable()->getCountOfAllTags($search); 
+			$total_tags = $this->getTagCategoryTable()->getCountOfAllTags($search);
 			$total_pages = ceil($total_tags/20);
-			$allTagData = $this->getTagTable()->getAllTags(20,$offset,$field,$order,$search);			 
-			return array('allTagData' => $allTagData,'field'=>$sort,'order'=>$order,'search'=>$search,'total_pages'=>$total_pages,'page'=> $page, 'error' => $error, 'success' => $success, 'flashMessages' => $this->flashMessenger()->getMessages());	 	
+			$allTagData = $this->getTagCategoryTable()->getAllTagCategoriess(20,$offset,$field,$order,$search);			 
+			return array('allTagCategoriesData' => $allTagCategoriesData,'field'=>$sort,'order'=>$order,'search'=>$search,'total_pages'=>$total_pages,'page'=> $page, 'error' => $error, 'success' => $success, 'flashMessages' => $this->flashMessenger()->getMessages());	 	
         }else{			
 			 return $this->redirect()->toRoute('jadmin/login', array('action' => 'login'));		
 		}	
@@ -92,11 +93,8 @@ class AdminTagController extends AbstractActionController
 			$identity = $auth->getIdentity();	
 			$this->layout()->identity = $identity;
             $sm = $this->getServiceLocator();
-            $this->tagCategoryTable = $sm->get('Tag\Model\TagCategoryTable');
-            $selectAllCategory = $this->tagCategoryTable->fetchAll();
-            $selectAllCategory = $this->tagCategoryTable->selectFormatAllTagCategory($selectAllCategory);
 
-			$form = new AdminTagForm($selectAllCategory);
+			$form = new AdminTagCategoryForm($selectAllCategory);
 			$form->get('submit')->setAttribute('value', 'Add');
 			$request = $this->getRequest();
 			$this->layout('layout/admin_page');	
@@ -108,7 +106,7 @@ class AdminTagController extends AbstractActionController
 				$form->setData($request->getPost());
 				if ($form->isValid()) {
 					$tag->exchangeArray($form->getData());
-					$this->getTagTable()->saveTag($tag);                
+					$this->getTagCategoryTable()->saveTagCategory($tag);                
 					return $this->redirect()->toRoute('jadmin/admin-tags');
 				} 
 			}
@@ -133,22 +131,22 @@ class AdminTagController extends AbstractActionController
 			$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');		
 			$id = (int)$this->params('id');
 			if (!$id) {
-				return $this->redirect()->toRoute('jadmin/admin-tags-add', array('action'=>'add'));
+				return $this->redirect()->toRoute('jadmin/admin-tag-categories-add', array('action'=>'add'));
 			}
-			$tag = $this->getTagTable()->getTag($id); 
-			if(!isset($tag->tag_id) || empty($tag->tag_id)){
-				return $this->redirect()->toRoute('jadmin/admin-tags', array('action'=>'index'));
+			$tag = $this->getTagCategoryTable()->getTagCategory($id); 
+			if(!isset($tag->tag_category_id) || empty($tag->tag_category_id)){
+				return $this->redirect()->toRoute('jadmin/admin-tag-categories', array('action'=>'index'));
 			}
 			$form = new AdminTagForm();
 			$form->bind($tag);
 			$form->get('submit')->setAttribute('value', 'Edit');        
 			$request = $this->getRequest();
 			if ($request->isPost()) {
-				$form->setInputFilter(new AdminTagEditFilter($dbAdapter, $id));		
+				$form->setInputFilter(new AdminTagCategoryEditFilter($dbAdapter, $id));		
 				$form->setData($request->getPost());
 				if ($form->isValid()) {
-					$this->getTagTable()->saveTag($tag);                // Redirect to list of tags
-					return $this->redirect()->toRoute('jadmin/admin-tags');
+					$this->getTagCategoryTable()->saveTagCategory($tag);                // Redirect to list of tags
+					return $this->redirect()->toRoute('jadmin/admin-tag-categories');
 				} 
 			}
 			return array(
@@ -176,16 +174,17 @@ class AdminTagController extends AbstractActionController
 			$this->layout()->identity = $identity;	
 			$id = (int)$this->params('id');
 			if (!$id) {
-				return $this->redirect()->toRoute('jadmin/admin-tags');
+				return $this->redirect()->toRoute('jadmin/admin-tag-categories');
 			}
-			$tag = $this->getTagTable()->getTag($id); 
-			if(!isset($tag->tag_id) || empty($tag->tag_id)){
-				return $this->redirect()->toRoute('jadmin/admin-tags', array('action'=>'index'));
+			$tag = $this->getTagCategoryTable()->getTagCategory($id);
+			if(!isset($tag->tag_category_id) || empty($tag->tag_category_id)){
+				return $this->redirect()->toRoute('jadmin/admin-tag-categories', array('action'=>'index'));
 			}
 			$request = $this->getRequest();
 			if ($request->isPost()) {
 				$del = $request->getPost()->get('del', 'No');
-				if ($del == 'Yes') {					 
+				if ($del == 'Yes') {
+                    $this->getTagCategoryTable()->deleteTagCategory($id);
 					$this->getTagTable()->deleteTag($id);
 					$this->getUserTagTable()->deleteUserTag($id);
 					$this->getGroupTagTable()->deleteGroupTag($id);
@@ -195,6 +194,7 @@ class AdminTagController extends AbstractActionController
 			return array(
 				'id' => $id,
 				'tag' => $this->getTagTable()->getTag($id),
+                'tagsList' => $this->getrTagTable()->fetchAllTag($id),
 				'usersList' => $this->getUserTagTable()->fetchAllUsersOfTag($id),
 				'groupList' => $this->getGroupTagTable()->fetchAllGroupsOfTag($id),
 				'error' => $error, 
@@ -206,7 +206,7 @@ class AdminTagController extends AbstractActionController
 		}
     }
 
-	public function getTagTable()
+    public function getTagTable()
     {
         if (!$this->tagTable) {
             $sm = $this->getServiceLocator();
@@ -215,7 +215,16 @@ class AdminTagController extends AbstractActionController
         return $this->tagTable;
     }
 
-	public function getUserTagTable()
+    public function getTagCategoryTable()
+    {
+        if (!$this->tagTable) {
+            $sm = $this->getServiceLocator();
+            $this->tagTable = $sm->get('Tag\Model\TagCategoryTable');
+        }
+        return $this->tagTable;
+    }
+
+    public function getUserTagTable()
     {
         if (!$this->userTagTable) {
             $sm = $this->getServiceLocator();
@@ -224,7 +233,7 @@ class AdminTagController extends AbstractActionController
         return $this->userTagTable;
     }
 
-	public function getGroupTagTable()
+    public function getGroupTagTable()
     {
         if (!$this->groupTagTable) {
             $sm = $this->getServiceLocator();
@@ -232,4 +241,5 @@ class AdminTagController extends AbstractActionController
         }
         return $this->groupTagTable;
     }
+	
 }
