@@ -17,8 +17,8 @@ class AdminTagCategoryFilter extends InputFilter
 				 
             ),
 			'validators' => array(
-        					array('name' => 'StringLength', 'options' => array('encoding' => 'UTF-8', 'min' => 1, 'max' => 200,),),
-							array('name' => 'Db\NoRecordExists', 'options' => array('table' => 'y2m_tag_category','field' => 'tag_category_title',  'adapter' => $dbAdapter),),                
+				array('name' => 'StringLength', 'options' => array('encoding' => 'UTF-8', 'min' => 1, 'max' => 200,),),
+				array('name' => 'Db\NoRecordExists', 'options' => array('table' => 'y2m_tag_category','field' => 'tag_category_title',  'adapter' => $dbAdapter),),                
 			),
         ));
 		

@@ -36,6 +36,5 @@ class TagCategory
 		}		
 		return $selectObject;	//return blank array
 	}
- 
-	
+ 	
 }

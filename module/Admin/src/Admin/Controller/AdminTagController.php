@@ -139,12 +139,27 @@ class AdminTagController extends AbstractActionController
 			if(!isset($tag->tag_id) || empty($tag->tag_id)){
 				return $this->redirect()->toRoute('jadmin/admin-tags', array('action'=>'index'));
 			}
-			$form = new AdminTagForm();
+			$this->tagCategoryTable = $sm->get('Tag\Model\TagCategoryTable');
+            $selectAllCategory = $this->tagCategoryTable->fetchAll();
+            $selectAllCategory = $this->tagCategoryTable->selectFormatAllTagCategory($selectAllCategory);
+			$selectedTagCategory = $this->tagCategoryTable->getTagCategory($tag->category_id);
+
+			$form = new AdminTagForm($selectAllCategory,$selectedTagCategory);
 			$form->bind($tag);
-			$form->get('submit')->setAttribute('value', 'Edit');        
+			$form->add(array(
+		            'name' => 'category_title',
+		            'attributes' => array(
+		                'type'  => 'text',
+		                'value' => $selectedTagCategory->tag_category_title,
+		                'readonly' => 'readonly',
+		            ),
+		        ));
+			$form->get('submit')->setAttribute('value', 'Edit'); 
+
 			$request = $this->getRequest();
 			if ($request->isPost()) {
-				$form->setInputFilter(new AdminTagEditFilter($dbAdapter, $id));		
+				$form->setInputFilter(new AdminTagEditFilter($dbAdapter, $id));	
+				
 				$form->setData($request->getPost());
 				if ($form->isValid()) {
 					$this->getTagTable()->saveTag($tag);                // Redirect to list of tags

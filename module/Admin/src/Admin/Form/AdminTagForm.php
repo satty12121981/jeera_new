@@ -4,7 +4,7 @@ use Zend\Form\Form;
 
 class AdminTagForm extends Form
 {
-    public function __construct($selectAllTagCategory, $selectedTagCategory = null, $name = null)
+    public function __construct($selectAllTagCategory = null, $selectedTagCategory = null, $name = null)
     {
         // we want to ignore the name passed
         parent::__construct('admintag');

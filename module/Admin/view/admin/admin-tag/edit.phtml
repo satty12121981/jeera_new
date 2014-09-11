@@ -52,9 +52,14 @@ $this->headTitle($title);
         echo $this->form()->openTag($form) . PHP_EOL;     
         
 		echo $this->formHidden($form->get('tag_id')) . PHP_EOL;
+        echo $this->formHidden($form->get('category_id')) . PHP_EOL;
         ?>
         <div class="module_content">
             
+            <fieldset>
+                <label>Category*</label>
+                <?php echo $this->formRow($form->get('category_title')) . PHP_EOL; ?>
+            </fieldset>
             <fieldset>
                 <label>Name*</label>
                 <?php echo $this->formRow($form->get('tag_title')) . PHP_EOL; ?>

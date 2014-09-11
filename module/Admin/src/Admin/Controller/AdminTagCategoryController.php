@@ -8,10 +8,10 @@ use Zend\Authentication\Adapter\DbTable as AuthAdapter;
 use Zend\Db\Sql\Select;
 use Zend\Authentication\Storage\Session as SessionStorage;
  
-use Tag\Model\Tag;
-use Admin\Form\AdminTagForm;
-use Admin\Form\AdminTagFilter;   
-use Admin\Form\AdminTagEditFilter;
+use Tag\Model\TagCategory;
+use Admin\Form\AdminTagCategoryForm;
+use Admin\Form\AdminTagCategoryFilter;   
+use Admin\Form\AdminTagCategoryEditFilter;
 
 class AdminTagCategoryController extends AbstractActionController
 {    
@@ -71,9 +71,9 @@ class AdminTagCategoryController extends AbstractActionController
 			if($sort==''){
 				$sort = 'id';
 			}
-			//$total_tags = $this->getTagCategoryTable()->getCountOfAllTagCategories($search);
-			//$total_pages = ceil($total_tags/20);
-			//$allTagData = $this->getTagCategoryTable()->getAllTagCategories(20,$offset,$field,$order,$search);			 
+			$total_tags = $this->getTagCategoryTable()->getCountOfAllTagCategories($search);
+			$total_pages = ceil($total_tags/20);
+			$allTagCategoriesData = $this->getTagCategoryTable()->getAllTagCategories(20,$offset,$field,$order,$search);			 
 			return array('allTagCategoriesData' => $allTagCategoriesData,'field'=>$sort,'order'=>$order,'search'=>$search,'total_pages'=>$total_pages,'page'=> $page, 'error' => $error, 'success' => $success, 'flashMessages' => $this->flashMessenger()->getMessages());	 	
         }else{			
 			 return $this->redirect()->toRoute('jadmin/login', array('action' => 'login'));		
@@ -93,21 +93,21 @@ class AdminTagCategoryController extends AbstractActionController
 			$identity = $auth->getIdentity();	
 			$this->layout()->identity = $identity;
             $sm = $this->getServiceLocator();
-
-			$form = new AdminTagCategoryForm($selectAllCategory);
+			$selectAllTagCategory = $this->getTagCategoryTable()->fetchAll();
+			$form = new AdminTagCategoryForm($selectAllTagCategory);
 			$form->get('submit')->setAttribute('value', 'Add');
 			$request = $this->getRequest();
 			$this->layout('layout/admin_page');	
 			if ($request->isPost()) {
-				$tag = new Tag();
+				$tag = new TagCategory();
 				$sm = $this->getServiceLocator();
 				$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-				$form->setInputFilter(new AdminTagFilter($dbAdapter));					 
+				$form->setInputFilter(new AdminTagCategoryFilter($dbAdapter));					 
 				$form->setData($request->getPost());
 				if ($form->isValid()) {
 					$tag->exchangeArray($form->getData());
 					$this->getTagCategoryTable()->saveTagCategory($tag);                
-					return $this->redirect()->toRoute('jadmin/admin-tags');
+					return $this->redirect()->toRoute('jadmin/admin-tag-categories');
 				} 
 			}
 			return array('form' => $form, 'error' => $error, 'success' => $success, 'flashMessages' => $this->flashMessenger()->getMessages());
@@ -137,7 +137,7 @@ class AdminTagCategoryController extends AbstractActionController
 			if(!isset($tag->tag_category_id) || empty($tag->tag_category_id)){
 				return $this->redirect()->toRoute('jadmin/admin-tag-categories', array('action'=>'index'));
 			}
-			$form = new AdminTagForm();
+			$form = new AdminTagCategoryForm();
 			$form->bind($tag);
 			$form->get('submit')->setAttribute('value', 'Edit');        
 			$request = $this->getRequest();
@@ -189,7 +189,7 @@ class AdminTagCategoryController extends AbstractActionController
 					$this->getUserTagTable()->deleteUserTag($id);
 					$this->getGroupTagTable()->deleteGroupTag($id);
 				}            
-				return $this->redirect()->toRoute('jadmin/admin-tags');
+				return $this->redirect()->toRoute('jadmin/admin-tag-categories');
 			}	 
 			return array(
 				'id' => $id,

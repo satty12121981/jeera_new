@@ -8,7 +8,7 @@ $this->headTitle($title);
 <section id="secondary_bar">
 
     <div class="breadcrumbs_container">
-        <article class="breadcrumbs"><a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a><div class="breadcrumb_divider"></div>  <a class="current" href="<?php echo $this->url('jadmin/admin-tag-categories') ?>">Manage Tags</a></article>
+        <article class="breadcrumbs"><a href="<?php echo $this->url('jadmin') ?>">Admin Dashboard </a><div class="breadcrumb_divider"></div>  <a class="current" href="<?php echo $this->url('jadmin/admin-tag-categories') ?>">Manage Tag Categories</a></article>
     </div>
 </section><!-- end of secondary bar -->
 <section id="main" class="column">
@@ -16,12 +16,12 @@ $this->headTitle($title);
     <article class="module width_3_quarter">
         <header><h3 class="tabs_involved"><?php echo $this->escapeHtml($title); ?></h3>
             <ul class="tabs">
-				<li><a href="<?php echo $this->url('jadmin/admin-tag-categories-add');?>">Add New Tag</a></li>
+				<li><a href="<?php echo $this->url('jadmin/admin-tag-categories-add');?>">Add New Tag Category</a></li>
             </ul>
         </header>
 		<div class="tag_quick_search">
 			<form  method="post" action="<?php echo $this->url('jadmin/admin-tag-categories');?>">
-				<input type="text" id="tag_search" name="tag_search" value="<?php echo $search; ?>" />
+				<input type="text" id="tag_category_search" name="tag_category_search" value="<?php echo $search; ?>" />
 				<input type="submit" value="Search" />
 			</form>
 		</div>
@@ -45,28 +45,28 @@ $this->headTitle($title);
 							<?php }else{ ?>
 							<a href="<?php echo $this->url('jadmin/admin-user-tags',    array('page'=> $page,'sort'=>'title','order'=>($field=='title'&&$order=='ASC')?'desc':'asc'));?>">
 							<?php } ?>
-							Tag Name</a></th>
+							Tag Category Name</a></th>
 							<th>Actions</th>
                         </tr> 
                     </thead> 
                     <tbody> 
-                        <?php foreach($allTagData as $tag) : ?>
+                        <?php foreach($allTagCategoriesData as $tag) : ?>
                             <tr>                                
-                                <td><?php echo $this->escapeHtml($tag->tag_id);?></td>
-								<td><?php echo $this->escapeHtml($tag->tag_title);?>
-								<?php if($tag->group_count){ ?><a href="<?php echo $this->url('jadmin/admin-planet-tags',    array('page'=> 1,'sort'=>'group','order'=>'asc','search'=>$tag->tag_title));?>">
+                                <td><?php echo $this->escapeHtml($tag->tag_category_id);?></td>
+								<td><?php echo $this->escapeHtml($tag->tag_category_title);?>
+								<?php if($tag->group_count){ ?><a href="<?php echo $this->url('jadmin/admin-planet-tags',    array('page'=> 1,'sort'=>'group','order'=>'asc','search'=>$tag->tag_category_title));?>">
 								(<?php echo $tag->group_count; ?> groups)
 								</a><?php } ?>
 								<?php if($tag->user_count){ ?>
-								<a href="<?php echo $this->url('jadmin/admin-user-tags',    array('page'=> 1,'sort'=>'group','order'=>'asc','search'=>$tag->tag_title));?>">
+								<a href="<?php echo $this->url('jadmin/admin-user-tags',    array('page'=> 1,'sort'=>'group','order'=>'asc','search'=>$tag->tag_category_title));?>">
 								(<?php echo $tag->user_count; ?> users)
 								<?php } ?>
-								<?php if($tag->activity_count){ ?>
-								<a href="<?php echo $this->url('jadmin/admin-activity-tags',    array('page'=> 1,'sort'=>'activity','order'=>'asc','search'=>$tag->tag_title));?>">
-								(<?php echo $tag->activity_count; ?> activities)
+								<?php if($tag->tag_count){ ?>
+								<a href="<?php echo $this->url('jadmin/admin-activity-tags',    array('page'=> 1,'sort'=>'activity','order'=>'asc','search'=>$tag->tag_category_title));?>">
+								(<?php echo $tag->tag_count; ?> tags)
 								<?php } ?>
 								</a></td>
-                                <td><a href="<?php echo $this->url('jadmin/admin-tag-categories-edit',    array('action'=>'edit', 'id' => $tag->tag_id));?>"><img src="<?php echo $this->basePath(); ?>/public/images/edit.png" title="Edit"></a>&nbsp;&nbsp;&nbsp;&nbsp; <a href="<?php echo $this->url('jadmin/admin-tag-categories-delete',    array('action'=>'delete', 'id' => $tag->tag_id));?>"><img src="<?php echo $this->basePath(); ?>/public/images/trash.png" title="Trash"></a></td> 
+                                <td><a href="<?php echo $this->url('jadmin/admin-tag-categories-edit',    array('action'=>'edit', 'id' => $tag->tag_category_id));?>"><img src="<?php echo $this->basePath(); ?>/public/images/edit.png" title="Edit"></a>&nbsp;&nbsp;&nbsp;&nbsp; <a href="<?php echo $this->url('jadmin/admin-tag-categories-delete',    array('action'=>'delete', 'id' => $tag->tag_category_id));?>"><img src="<?php echo $this->basePath(); ?>/public/images/trash.png" title="Trash"></a></td> 
                             </tr> 
                         <?php endforeach; ?> 
                     </tbody> 
